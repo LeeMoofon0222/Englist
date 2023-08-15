@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "11222946805",
+    "project_id": "pc-api-9131739738687432722-931",
+    "storage_bucket": "pc-api-9131739738687432722-931.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:11222946805:android:f8e0a314d0e26cd213c6bc",
+        "android_client_info": {
+          "package_name": "com.example.gt_test_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "11222946805-mtrp8vp4updu2i9snk9arvusm87vft9a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDervpmYXev4zhSuKTgFC9SVnLfQYpRJNg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "11222946805-mtrp8vp4updu2i9snk9arvusm87vft9a.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "11222946805-1lsqojlf1mgrel74pgl9tqo1sv0vlv4l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.gtTestApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

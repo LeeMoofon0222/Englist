@@ -2,18 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:gt_test_app/Components/mybutton.dart';
 import 'package:gt_test_app/Components/square_tile.dart';
 import '../Components/mytextfield.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void sign() {}
+  void sign() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Center(
@@ -32,8 +38,8 @@ class LoginPage extends StatelessWidget {
               ),
               const SizedBox(height: 25),
               MyTextField(
-                controller: usernameController,
-                hintText: '帳號',
+                controller: emailController,
+                hintText: '電子郵件',
                 obscureText: false,
               ),
               const SizedBox(height: 10),
@@ -59,7 +65,7 @@ class LoginPage extends StatelessWidget {
               MyButton(
                 onTap: sign,
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
@@ -105,8 +111,7 @@ class LoginPage extends StatelessWidget {
                   const Text(
                     '現在註冊',
                     style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold),
+                        color: Colors.blue, fontWeight: FontWeight.bold),
                   )
                 ],
               )
