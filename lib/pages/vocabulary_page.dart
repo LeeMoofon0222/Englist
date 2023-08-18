@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 
 class VocabularyPage extends StatelessWidget {
-  const VocabularyPage({super.key});
-
+  VocabularyPage({super.key});
+  final user = FirebaseAuth.instance.currentUser!;
   void signUserOut() {
     FirebaseAuth.instance.signOut();
   }

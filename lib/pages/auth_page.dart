@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:gt_test_app/pages/login_page.dart';
+//import 'package:gt_test_app/pages/login_page.dart';
 import 'package:gt_test_app/pages/vocabulary_page.dart';
+import 'Login_Or_Register_Page.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({Key? key}) : super(key: key);
@@ -14,10 +15,10 @@ class AuthPage extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const VocabularyPage();
+            return VocabularyPage();
           }
           else {
-            return LoginPage();
+            return const LoginOrRegisterPage();
           }
         },
       ),
