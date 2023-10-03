@@ -38,10 +38,15 @@ dependencies:
   firebase_core: ^2.15.0
   google_sign_in: ^6.1.4
   firebase_auth: ^4.7.2
+  http: ^1.1.0
+  flutter_i18n: ^0.34.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.18.1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

@@ -70,12 +70,12 @@ class _RegisterPageState extends State<RegisterPage> {
             children: [
               const SizedBox(height: 20),
               const Icon(
-                Icons.lock,
-                size: 60,
+                Icons.menu_book,
+                size: 80,
               ),
               const SizedBox(height: 10),
               Text(
-                "讓我們為你創建帳號",
+                "讓我們為您創建帳號",
                 style: TextStyle(color: Colors.grey[700], fontSize: 25),
               ),
               const SizedBox(height: 10),

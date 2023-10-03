@@ -5,6 +5,7 @@ import 'package:gt_test_app/services/auth_service.dart';
 import '../Components/mytextfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
 
@@ -64,8 +65,8 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               const SizedBox(height: 30),
               const Icon(
-                Icons.lock,
-                size: 80,
+                Icons.menu_book,
+                size: 100,
               ),
               const SizedBox(height: 10),
               Text(
@@ -133,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   SquareTile(imagePath: 'lib/images/google.png',onTap: () => AuthService().signInWithGoogle()),
                   const SizedBox(width: 40),
-                  SquareTile(imagePath: 'lib/images/apple.png',onTap: (){},)
+                  SquareTile(imagePath: 'lib/images/Anonymous.png', onTap: () => AuthService().signInWithAnon())
                 ],
               ),
               const SizedBox(height: 20),

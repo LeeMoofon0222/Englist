@@ -6,6 +6,8 @@ import 'pages/vocabulary_page.dart';
 import 'pages/test_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +23,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        Locale('en'), // English
+        Locale('es'), // Spanish
+      ],
       debugShowCheckedModeBanner: false,
       //home: const LoginPage(),
       title: 'My App',
@@ -36,99 +47,55 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyDrawer extends StatelessWidget {
-  const MyDrawer({super.key});
+class BottomAppBarWidget extends StatefulWidget {
+  //final Function onTap;
+  const BottomAppBarWidget({super.key});
 
   @override
+  State<StatefulWidget> createState() => _BottomAppBarWidget();
+}
+
+class _BottomAppBarWidget extends State<BottomAppBarWidget> {
+  @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        children: <Widget>[
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/landspace.jpg'),
-                fit: BoxFit.fill,
+    return Container(
+      color: Colors.grey[300],  // 設定整個底部區域的背景顏色
+      child: BottomAppBar(
+        color: Colors.transparent, // 使 BottomAppBar 背景透明
+        elevation: 0, // 取消陰影
+        child: SizedBox(
+          height: kBottomNavigationBarHeight,  // 使用底部導航欄的預設高度
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.book_outlined, size: 30,),
+                onPressed: () {
+                  Navigator.popAndPushNamed(context, '/VP');
+                },
               ),
-            ),
-            child: Stack(
-              children: [
-                Text(
-                  'Menu',
-                  textAlign: TextAlign.center,
-                  strutStyle: StrutStyle(
-                    fontSize: 100,
-                    leading: 0,
-                    height: 1.1,
-                    forceStrutHeight: true,
-                  ),
-                  style: TextStyle(
-                      fontSize: 40.0,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white),
-                ),
-              ],
-            ),
+              IconButton(
+                icon: const Icon(Icons.edit, size: 30,),
+                onPressed: () {
+                  Navigator.popAndPushNamed(context, '/TP');
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.settings, size: 30,),
+                onPressed: () {
+                  Navigator.popAndPushNamed(context, '/SP');
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.account_box, size: 30,),
+                onPressed: () {
+                  Navigator.popAndPushNamed(context, '/AP');
+                },
+              ),
+            ],
           ),
-          ListTile(
-            title: const Text(
-              '收藏單字',
-              style: TextStyle(fontSize: 20.0, color: Colors.black),
-            ),
-            onTap: () {
-              Navigator.popAndPushNamed(context, '/VP');
-            },
-          ),
-          ListTile(
-            title: const Text(
-              '測驗',
-              style: TextStyle(fontSize: 20.0, color: Colors.black),
-            ),
-            onTap: () {
-              Navigator.popAndPushNamed(context, '/TP');
-            },
-          ),
-          ListTile(
-            title: const Text(
-              '設定',
-              style: TextStyle(fontSize: 20.0, color: Colors.black),
-            ),
-            onTap: () {
-              Navigator.popAndPushNamed(context, '/SP');
-            },
-          ),
-          ListTile(
-            title: const Text(
-              '關於我',
-              style: TextStyle(fontSize: 20.0, color: Colors.black),
-            ),
-            onTap: () {
-              Navigator.popAndPushNamed(context, '/AP');
-            },
-          ),
-        ],
+        ),
       ),
     );
   }
-}
-
-showAlertDialog(BuildContext context, height) {
-  // Init
-  AlertDialog dialog = AlertDialog(
-    title: Text("${"垃圾量 " + height}%"),
-    actions: [
-      ElevatedButton(
-          child: const Text("OK"),
-          onPressed: () {
-            Navigator.pop(context);
-          }),
-    ],
-  );
-
-  // Show the dialog
-  showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return dialog;
-      });
 }
