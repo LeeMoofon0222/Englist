@@ -6,7 +6,6 @@ import 'pages/vocabulary_page.dart';
 import 'pages/test_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 
 Future<void> main() async {
@@ -23,22 +22,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: [
-        Locale('en'), // English
-        Locale('es'), // Spanish
-      ],
       debugShowCheckedModeBanner: false,
       //home: const LoginPage(),
       title: 'My App',
       initialRoute: '/',
       routes: {
         '/': (context) => const AuthPage(),
-        '/VP': (context) => VocabularyPage(),
+        '/VP': (context) => VocabularyPage(text: '',),
         '/TP': (context) => const TestPage(),
         '/SP': (context) => const SettingPage(),
         '/AP': (context) => const AboutMePage()
@@ -64,7 +54,7 @@ class _BottomAppBarWidget extends State<BottomAppBarWidget> {
         color: Colors.transparent, // 使 BottomAppBar 背景透明
         elevation: 0, // 取消陰影
         child: SizedBox(
-          height: kBottomNavigationBarHeight,  // 使用底部導航欄的預設高度
+          height: kBottomNavigationBarHeight,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [

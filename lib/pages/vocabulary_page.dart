@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_i18n/flutter_i18n.dart';
-import '../Components/mytextfield.dart';
+import 'package:gt_test_app/Components/translateTextField.dart';
+//import '../Components/mytextfield.dart';
 import '../main.dart';
-
+import 'package:google_cloud_translation/google_cloud_translation.dart';
 class VocabularyPage extends StatefulWidget {
-  VocabularyPage({super.key});
+  late String text;
+
+  VocabularyPage({super.key, required this.text});
 
   @override
   State<VocabularyPage> createState() => _VocabularyPageState();
@@ -13,13 +15,39 @@ class VocabularyPage extends StatefulWidget {
   final user = FirebaseAuth.instance.currentUser!;
 }
 
+class Vocabulary {
+  Vocabulary({required this.englishWord, required this.chineseWord});
+  String englishWord;
+  String chineseWord;
+}
+
+
 class _VocabularyPageState extends State<VocabularyPage> {
+  String receivedWord='';
+  late Translation _translation;
+  TranslationModel _translated = TranslationModel(translatedText: '', detectedSourceLanguage: '');
   final vocabularyEnglishController = TextEditingController();
   final vocabularyChineseController = TextEditingController();
   final translateController = TextEditingController();
+  final List<Vocabulary> _vocabularies = <Vocabulary>[];
+
+
+  @override
+  void initState() {
+    _translation = Translation(
+      apiKey: 'AIzaSyDervpmYXev4zhSuKTgFC9SVnLfQYpRJNg',
+    );
+    super.initState();
+  }
 
   void signUserOut() {
     FirebaseAuth.instance.signOut();
+  }
+
+  void _addVocabulary(String englishWord, String chineseWord) {
+    setState(() {
+      _vocabularies.add(Vocabulary(englishWord: englishWord, chineseWord: chineseWord));
+    });
   }
 
   Future<void> showAlert(BuildContext context) {
@@ -27,36 +55,49 @@ class _VocabularyPageState extends State<VocabularyPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.grey[600],
+          backgroundColor: Colors.grey[300],
           content: SizedBox(
-            width: 280, // 减小AlertDialog的宽度
-            height: 200, // 减小AlertDialog的高度
+            width: 280,
+            height: 200,
+            child: SingleChildScrollView(
             child: Column(
               children: [
                 const Center(
-                  child: Text(
+                  child:
+                  Text(
                     '新增單字',
-                    style: TextStyle(fontSize: 30, color: Colors.white),
+                    style: TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.w500),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 3),
                 SizedBox(
-                  width: 300, // 設置寬度
-                  height: 50, // 設置高度
-                  child: MyTextField(
+                  width: 300,
+                  height: 43,
+                  child: TranslateTextField(
                     controller: vocabularyEnglishController,
                     hintText: '英文',
                     obscureText: false,
                   ),
                 ),
-                const Icon(
-                  Icons.autorenew,
-                  size: 40,
+                IconButton(
+                  icon: const Icon(Icons.autorenew),
+                  iconSize: 30,
+                  onPressed: () async {
+                    receivedWord = widget.text;
+                    if(vocabularyChineseController.text!=''&&vocabularyEnglishController.text==''){
+                      _translated = await _translation.translate(text: vocabularyChineseController.text, to: 'en');//更改語言
+                      vocabularyEnglishController.text=_translated.translatedText;
+                    }
+                    else{
+                      _translated = await _translation.translate(text: vocabularyEnglishController.text, to: 'zh-TW');//更改語言
+                      vocabularyChineseController.text=_translated.translatedText;
+                    }
+                  },
                 ),
                 SizedBox(
-                  width: 300, // 設置寬度
-                  height: 50, // 設置高度
-                  child: MyTextField(
+                  width: 300,
+                  height: 43,
+                  child: TranslateTextField(
                     controller: vocabularyChineseController,
                     hintText: '中文',
                     obscureText: false,
@@ -64,24 +105,40 @@ class _VocabularyPageState extends State<VocabularyPage> {
                 ),
               ],
             ),
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                vocabularyEnglishController.clear();
+                vocabularyChineseController.clear();
               },
               child: const Text(
-                '取消',
-                style: TextStyle(fontSize: 20, color: Colors.white),
+                '清空',
+                style: TextStyle(fontSize: 15, color: Colors.blue, fontWeight: FontWeight.w500),
               ),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                vocabularyEnglishController.clear();
+                vocabularyChineseController.clear();
+              },
+              child: const Text(
+                '取消',
+                style: TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w500),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _addVocabulary("englishWord", "chineseWord");
+                vocabularyEnglishController.clear();
+                vocabularyChineseController.clear();
               },
               child: const Text(
                 '確定',
-                style: TextStyle(fontSize: 20, color: Colors.white),
+                style: TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w500),
               ),
             ),
           ],
@@ -119,8 +176,22 @@ class _VocabularyPageState extends State<VocabularyPage> {
       ),
       bottomNavigationBar: const BottomAppBarWidget(),
       backgroundColor: Colors.grey[300],
-      body: const Column(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          // Add your content here
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              /*
+              children: _vocabularys.map((Vocabulary vocabulary) {
+                return _vocabularys(
+                  8todo: vocabulary,
+                );
+              }).toList(),*/
+            ),
+          ),
+        ],
       ),
     );
   }

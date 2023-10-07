@@ -5,7 +5,6 @@ import 'package:gt_test_app/services/auth_service.dart';
 import '../Components/mytextfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
 
@@ -43,11 +42,49 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Colors.grey[300],
           title: Text(
             message,
-            style: const TextStyle(color: Colors.white, fontSize: 20),
+            style: const TextStyle(color: Colors.black, fontSize: 21, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
           ),
+        );
+      },
+    );
+  }
+
+  void anoMessage() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.grey[300],
+          title: const Text(
+            "確定要以匿名帳號登入嗎",
+            style: TextStyle(color: Colors.black, fontSize: 21, fontWeight: FontWeight.w500),
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                '取消',
+                style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.w500),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                AuthService().signInWithAnon();
+              },
+              child: const Text(
+                '確定',
+                style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.w500),
+              ),
+            ),
+          ],
         );
       },
     );
@@ -132,9 +169,13 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SquareTile(imagePath: 'lib/images/google.png',onTap: () => AuthService().signInWithGoogle()),
+                  SquareTile(
+                      imagePath: 'lib/images/google.png',
+                      onTap: () => AuthService().signInWithGoogle()),
                   const SizedBox(width: 40),
-                  SquareTile(imagePath: 'lib/images/Anonymous.png', onTap: () => AuthService().signInWithAnon())
+                  SquareTile(
+                      imagePath: 'lib/images/Anonymous.png',
+                      onTap: () => anoMessage())
                 ],
               ),
               const SizedBox(height: 20),
