@@ -65,7 +65,7 @@ class _BottomAppBarWidget extends State<BottomAppBarWidget> {
                 },
               ),
               IconButton(
-                icon: const Icon(Icons.edit, size: 30,),
+                icon: const Icon(Icons.drive_file_rename_outline_outlined, size: 30,),
                 onPressed: () {
                   Navigator.popAndPushNamed(context, '/TP');
                 },

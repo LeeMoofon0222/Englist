@@ -14,12 +14,11 @@ class TranslateTextField extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _TranslateTextFieldState createState() => _TranslateTextFieldState();
+  State<TranslateTextField> createState() => _TranslateTextFieldState();
 }
 
 class _TranslateTextFieldState extends State<TranslateTextField> {
   String text = "";
-  VocabularyPage vocabularyPage = VocabularyPage(text: '',);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,7 @@ class _TranslateTextFieldState extends State<TranslateTextField> {
         onChanged: (changeText) {
           setState(() {
             text = changeText;
-            vocabularyPage.text = text;
+            VocabularyPage(text: text);
           });
         },
         controller: widget.controller,
