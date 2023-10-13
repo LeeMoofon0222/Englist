@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gt_test_app/Components/translateTextField.dart';
-
 //import '../Components/mytextfield.dart';
 import 'package:gt_test_app/Components/vocabularyItem.dart';
 import '../main.dart';
@@ -9,7 +8,6 @@ import 'package:google_cloud_translation/google_cloud_translation.dart';
 
 class VocabularyPage extends StatefulWidget {
   final String text;
-
   VocabularyPage({super.key, required this.text});
 
   @override
@@ -38,7 +36,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
   @override
   void initState() {
     _translation = Translation(
-      apiKey: '',//填入API金鑰，避面濫用，因此已隱藏
+      apiKey: '',//填入API金鑰，為避免濫用，因此已隱藏
     );
     super.initState();
   }
@@ -51,6 +49,12 @@ class _VocabularyPageState extends State<VocabularyPage> {
     setState(() {
       _vocabularies
           .add(Vocabulary(mainWord: mainWord, associateWord: associateWord));
+    });
+  }
+
+  void _deleteItem(Vocabulary vocabulary) {
+    setState(() {
+      _vocabularies.removeWhere((element) => element.mainWord == vocabulary.mainWord);
     });
   }
 
@@ -199,7 +203,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         children: _vocabularies.map((Vocabulary vocabulary) {
-          return VocabularyItem(vocabulary: vocabulary);
+          return VocabularyItem(vocabulary: vocabulary, removeVocabulary: _deleteItem,);
         }).toList(),
       ),
       bottomNavigationBar: const BottomAppBarWidget(),
