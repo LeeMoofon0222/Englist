@@ -1,19 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gt_test_app/Components/translateTextField.dart';
+
 //import '../Components/mytextfield.dart';
 import 'package:gt_test_app/Components/vocabularyItem.dart';
 import '../main.dart';
 import 'package:google_cloud_translation/google_cloud_translation.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class VocabularyPage extends StatefulWidget {
   final String text;
+
   VocabularyPage({super.key, required this.text});
 
   @override
   State<VocabularyPage> createState() => _VocabularyPageState();
-
-  final user = FirebaseAuth.instance.currentUser!;
 }
 
 class Vocabulary {
@@ -32,17 +33,35 @@ class _VocabularyPageState extends State<VocabularyPage> {
   final vocabularyChineseController = TextEditingController();
   final translateController = TextEditingController();
   final List<Vocabulary> _vocabularies = <Vocabulary>[];
+  DatabaseReference firebaseDB = FirebaseDatabase.instance.ref();
+  final user = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
     _translation = Translation(
-      apiKey: '',//填入API金鑰，為避免濫用，因此已隱藏
+      apiKey: '', //填入API金鑰，為避免濫用，因此已隱藏
     );
     super.initState();
   }
 
   void signUserOut() {
     FirebaseAuth.instance.signOut();
+  }
+
+  void _set(String mainWord, String associateWord) {
+    Map<String, String> data = {
+      "mainWord": mainWord,
+      "associateWord": associateWord
+    };
+
+    firebaseDB
+        .child("user")
+        .child(user!.uid)
+        .set(data)
+        .whenComplete(() => print("finish"))
+        .catchError((error) {
+      print(error);
+    });
   }
 
   void _addVocabulary(String mainWord, String associateWord) {
@@ -54,8 +73,25 @@ class _VocabularyPageState extends State<VocabularyPage> {
 
   void _deleteItem(Vocabulary vocabulary) {
     setState(() {
-      _vocabularies.removeWhere((element) => element.mainWord == vocabulary.mainWord);
+      _vocabularies
+          .removeWhere((element) => element.mainWord == vocabulary.mainWord);
     });
+  }
+
+  void showError(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.grey[300],
+          title: Text(
+            message,
+            style: const TextStyle(color: Colors.black, fontSize: 21, fontWeight: FontWeight.w500),
+            textAlign: TextAlign.center,
+          ),
+        );
+      },
+    );
   }
 
   Future<void> showAlert(BuildContext context) {
@@ -153,11 +189,19 @@ class _VocabularyPageState extends State<VocabularyPage> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
-                _addVocabulary(vocabularyEnglishController.text,
-                    vocabularyChineseController.text);
-                vocabularyEnglishController.clear();
-                vocabularyChineseController.clear();
+                if (vocabularyChineseController.text != "" &&
+                    vocabularyEnglishController.text != "") {
+                  Navigator.of(context).pop();
+                  _addVocabulary(vocabularyEnglishController.text,
+                      vocabularyChineseController.text);
+                  _set(vocabularyEnglishController.text,
+                      vocabularyChineseController.text);
+                  vocabularyEnglishController.clear();
+                  vocabularyChineseController.clear();
+                }
+                else{
+                  showError("Text can't be empty");
+                }
               },
               child: const Text(
                 '確定',
@@ -203,7 +247,10 @@ class _VocabularyPageState extends State<VocabularyPage> {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         children: _vocabularies.map((Vocabulary vocabulary) {
-          return VocabularyItem(vocabulary: vocabulary, removeVocabulary: _deleteItem,);
+          return VocabularyItem(
+            vocabulary: vocabulary,
+            removeVocabulary: _deleteItem,
+          );
         }).toList(),
       ),
       bottomNavigationBar: const BottomAppBarWidget(),

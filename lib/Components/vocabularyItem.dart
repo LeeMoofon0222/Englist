@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gt_test_app/Components/translateTextField.dart';
 import 'package:gt_test_app/pages/vocabulary_page.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class VocabularyItem extends StatefulWidget {
 
@@ -21,6 +22,8 @@ class VocabularyItem extends StatefulWidget {
   String associateWordText = "";
   final vocabularyTranslateController = TextEditingController();
   final vocabularyDetectController = TextEditingController();
+  DatabaseReference firebaseDB = FirebaseDatabase.instance.ref();
+
 
   void showAlert(BuildContext context) {
     showDialog(
@@ -144,17 +147,17 @@ class VocabularyItem extends StatefulWidget {
             children: [
               Text(
                 mainWordText,
-                style: const TextStyle(color: Colors.black, fontSize: 25),
+                style: const TextStyle(color: Colors.black, fontSize: 28),
               ),
               Text(
                 associateWordText,
-                style: const TextStyle(color: Colors.black, fontSize: 15),
+                style: const TextStyle(color: Colors.black, fontSize: 23),
               ),
             ],
           ),
         ),
         IconButton(
-          iconSize: 28,
+          iconSize: 30,
           icon: const Icon(
             Icons.edit,
           ),

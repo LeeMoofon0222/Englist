@@ -41,6 +41,7 @@ dependencies:
   http: ^0.13.0
   google_cloud_translation: ^0.0.3
   firebase_storage: ^11.2.8
+  firebase_database: ^10.3.2
 
 dev_dependencies:
   flutter_test:
