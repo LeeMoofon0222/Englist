@@ -41,7 +41,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
   @override
   void initState() {
     _translation = Translation(
-      apiKey: 'AIzaSyDervpmYXev4zhSuKTgFC9SVnLfQYpRJNg', //填入API金鑰，為避免濫用，因此已隱藏
+      apiKey: '', //填入API金鑰，為避免濫用，因此已隱藏
     );
     super.initState();
   }
