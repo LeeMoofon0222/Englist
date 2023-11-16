@@ -29,8 +29,8 @@ class MyApp extends StatelessWidget {
       title: 'My App',
       initialRoute: '/',
       routes: {
-        '/': (context) => const AuthPage(),
-        '/VP': (context) => VocabularyPage(text: ''),
+        '/': (context) => AuthPage(),
+        '/VP': (context) => VocabularyPage(text: '', onTap: () {  }, ),
         '/TP': (context) => const TestPage(),
         '/SP': (context) => const SettingPage(),
         '/AP': (context) => const AboutMePage()

@@ -1,29 +1,27 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:gt_test_app/Components/mybutton.dart';
 import 'package:gt_test_app/Components/square_tile.dart';
-import 'package:gt_test_app/services/auth_service.dart';
 import '../Components/mytextfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginPage extends StatefulWidget {
+import '../services/auth_service.dart';
+
+class InpageRegisterPage extends StatefulWidget {
   final Function()? onTap;
 
-  const LoginPage({super.key, required this.onTap});
+  const InpageRegisterPage({super.key, required this.onTap});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<InpageRegisterPage> createState() => _InPageRegisterPageState();
+
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _InPageRegisterPageState extends State<InpageRegisterPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  DatabaseReference firebaseDB = FirebaseDatabase.instance.ref();
-  final user = FirebaseAuth.instance.currentUser;
+  final confirmPasswordController = TextEditingController();
 
-
-  void sign() async {
+  void signup() async {
     showDialog(
       context: context,
       builder: (context) {
@@ -33,10 +31,14 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text, password: passwordController.text);
+      if (passwordController.text == confirmPasswordController.text) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: emailController.text, password: passwordController.text);
+      }
+      else{
+        showErrorMessage("密碼不相同");
+      }
       Navigator.pop(context);
-      //_set("EmailAndPassword", emailController.text);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
       showErrorMessage(e.code);
@@ -59,19 +61,15 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-
-
   void anoMessage() {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Colors.grey[300],
-          title: const Text(
-            "確定要以匿名帳號登入嗎",
+          backgroundColor: Colors.grey[100],
+          title: const Text("確定要以匿名帳號登入嗎",
             style: TextStyle(color: Colors.black, fontSize: 21, fontWeight: FontWeight.w500),
-            textAlign: TextAlign.center,
-          ),
+            textAlign: TextAlign.center,),
           actions: [
             TextButton(
               onPressed: () {
@@ -86,7 +84,6 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () {
                 Navigator.of(context).pop();
                 AuthService().signInWithAnon();
-                //AuthPage("Anonymous", "Anonymous");
               },
               child: const Text(
                 '確定',
@@ -99,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,17 +107,17 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               const Icon(
                 Icons.menu_book,
-                size: 100,
+                size: 80,
               ),
               const SizedBox(height: 10),
               Text(
-                "歡迎回來!",
+                "讓我們為您創建帳號",
                 style: TextStyle(color: Colors.grey[700], fontSize: 25),
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 10),
               MyTextField(
                 controller: emailController,
                 hintText: '電子郵件',
@@ -132,22 +130,15 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: true,
               ),
               const SizedBox(height: 10),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      '忘記密碼?',
-                      style: TextStyle(color: Colors.black, fontSize: 15),
-                    ),
-                  ],
-                ),
+              MyTextField(
+                controller: confirmPasswordController,
+                hintText: '確認密碼',
+                obscureText: true,
               ),
               const SizedBox(height: 20),
               MyButton(
-                text: "登入",
-                onTap: sign,
+                text: "註冊",
+                onTap: signup,
               ),
               const SizedBox(height: 20),
               Padding(
@@ -156,9 +147,9 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Expanded(
                         child: Divider(
-                      thickness: 0.8,
-                      color: Colors.grey[800],
-                    )),
+                          thickness: 0.8,
+                          color: Colors.grey[800],
+                        )),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Text(
@@ -168,9 +159,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Expanded(
                         child: Divider(
-                      thickness: 0.8,
-                      color: Colors.grey[800],
-                    ))
+                          thickness: 0.8,
+                          color: Colors.grey[800],
+                        ))
                   ],
                 ),
               ),
@@ -178,28 +169,18 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SquareTile(
-                      imagePath: 'lib/images/google.png',
-                      onTap: () => AuthService().signInWithGoogle()),
-                  const SizedBox(width: 40),
-                  SquareTile(
-                      imagePath: 'lib/images/Anonymous.png',
-                      onTap: () => anoMessage())
+                  SquareTile(imagePath: 'lib/images/google.png',onTap: () => AuthService().signInWithGoogle()),
                 ],
               ),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    '還沒有帳號?',
-                    style: TextStyle(color: Colors.grey[700]),
-                  ),
                   const SizedBox(height: 4),
                   GestureDetector(
                     onTap: widget.onTap,
                     child: const Text(
-                      '現在註冊',
+                      '返回上一頁',
                       style: TextStyle(
                           color: Colors.blue, fontWeight: FontWeight.bold),
                     ),

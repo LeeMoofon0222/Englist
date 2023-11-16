@@ -28,7 +28,7 @@ class _TranslateTextFieldState extends State<TranslateTextField> {
         onChanged: (changeText) {
           setState(() {
             text = changeText;
-            VocabularyPage(text: text);
+            VocabularyPage(text: text, onTap: () {  },  );
           });
         },
         controller: widget.controller,

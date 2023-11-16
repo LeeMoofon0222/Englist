@@ -1,8 +1,7 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gt_test_app/Components/translateTextField.dart';
-
-//import '../Components/mytextfield.dart';
 import 'package:gt_test_app/Components/vocabularyItem.dart';
 import '../main.dart';
 import 'package:google_cloud_translation/google_cloud_translation.dart';
@@ -10,8 +9,9 @@ import 'package:firebase_database/firebase_database.dart';
 
 class VocabularyPage extends StatefulWidget {
   final String text;
+  final Function()? onTap;
 
-  VocabularyPage({super.key, required this.text});
+  VocabularyPage({super.key, required this.text, required this.onTap});
 
   @override
   State<VocabularyPage> createState() => _VocabularyPageState();
@@ -35,34 +35,62 @@ class _VocabularyPageState extends State<VocabularyPage> {
   final List<Vocabulary> _vocabularies = <Vocabulary>[];
   DatabaseReference firebaseDB = FirebaseDatabase.instance.ref();
   final user = FirebaseAuth.instance.currentUser;
+  final List<String> mainList = [];
+  final List<String> associateList = [];
 
   @override
   void initState() {
     _translation = Translation(
-      apiKey: '', //填入API金鑰，為避免濫用，因此已隱藏
+      apiKey: 'AIzaSyDervpmYXev4zhSuKTgFC9SVnLfQYpRJNg', //填入API金鑰，為避免濫用，因此已隱藏
     );
     super.initState();
   }
 
-  void signUserOut() {
-    FirebaseAuth.instance.signOut();
-  }
-
-  void _set(String mainWord, String associateWord) {
-    Map<String, String> data = {
-      "mainWord": mainWord,
-      "associateWord": associateWord
+/*
+  void _create(String mainWord, String associateWord) {
+    mainList.add(mainWord);
+    associateList.add(associateWord);
+    Map<String, List<String>> data = {
+      "mainWord": mainList,
+      "associateWord": associateList
     };
 
-    firebaseDB
-        .child("user")
-        .child(user!.uid)
-        .set(data)
-        .whenComplete(() => print("finish"))
-        .catchError((error) {
+  void _read(String mainWord, String associateWord) {
+    mainList.add(mainWord);
+    associateList.add(associateWord);
+    Map<String, List<String>> data = {
+      "mainWord": mainList,
+      "associateWord": associateList
+    };
+
+  void _update(String mainWord, String associateWord) {
+    mainList.add(mainWord);
+    associateList.add(associateWord);
+    Map<String, List<String>> data = {
+      "mainWord": mainList,
+      "associateWord": associateList
+    };
+
+  void _delete(String mainWord, String associateWord) {
+    mainList.add(mainWord);
+    associateList.add(associateWord);
+    Map<String, List<String>> data = {
+      "mainWord": mainList,
+      "associateWord": associateList
+    };
+
+
+  }
+  void _fetch(){
+    firebaseDB.child("user/${user?.uid}").once().then((DataSnapshot snapshot){
+      var user = snapshot.value;
+      setState((){
+        userSubject = user['userSubject'];
+      });
+    } as FutureOr Function(DatabaseEvent value)).catchError((error){
       print(error);
     });
-  }
+  }*/
 
   void _addVocabulary(String mainWord, String associateWord) {
     setState(() {
@@ -86,12 +114,120 @@ class _VocabularyPageState extends State<VocabularyPage> {
           backgroundColor: Colors.grey[300],
           title: Text(
             message,
-            style: const TextStyle(color: Colors.black, fontSize: 21, fontWeight: FontWeight.w500),
+            style: const TextStyle(
+                color: Colors.black, fontSize: 21, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
           ),
         );
       },
     );
+  }
+
+  void signUserOut() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user?.email != null) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.grey[300],
+            title: const Text(
+              "確定要登出嗎",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 21,
+                  fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  '取消',
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  FirebaseAuth.instance.signOut();
+                },
+                child: const Text(
+                  '確定',
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.grey[300],
+            title: const Text(
+              "確定要登出嗎，資料將遺失 登入以儲存資料",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 21,
+                  fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  widget.onTap!();
+                },
+                child: const Text(
+                  '登入',
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.blue,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  '取消',
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  FirebaseAuth.instance.signOut();
+                  /*Delete用戶*/
+                },
+                child: const Text(
+                  '確定',
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   Future<void> showAlert(BuildContext context) {
@@ -194,13 +330,10 @@ class _VocabularyPageState extends State<VocabularyPage> {
                   Navigator.of(context).pop();
                   _addVocabulary(vocabularyEnglishController.text,
                       vocabularyChineseController.text);
-                  _set(vocabularyEnglishController.text,
-                      vocabularyChineseController.text);
                   vocabularyEnglishController.clear();
                   vocabularyChineseController.clear();
-                }
-                else{
-                  showError("Text can't be empty");
+                } else {
+                  showError("字串不得為空白");
                 }
               },
               child: const Text(
@@ -217,8 +350,10 @@ class _VocabularyPageState extends State<VocabularyPage> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("收藏單字",
@@ -234,14 +369,14 @@ class _VocabularyPageState extends State<VocabularyPage> {
                 Icons.add,
                 size: 40,
               )),
-          IconButton(
-            onPressed: signUserOut,
-            icon: const Icon(
-              Icons.logout,
-              size: 30,
-            ),
-            color: Colors.white,
-          )
+            IconButton(
+              onPressed: signUserOut,
+              icon: const Icon(
+                Icons.logout,
+                size: 30,
+              ),
+              color: Colors.white,
+            )
         ],
       ),
       body: ListView(

@@ -13,7 +13,7 @@ class AboutMePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("關於我",
+        title: const Text("幕後人員",
             style: TextStyle(color: Colors.white, fontSize: 23)),
         backgroundColor: Colors.grey[800],
         iconTheme: const IconThemeData(color: Colors.white),
