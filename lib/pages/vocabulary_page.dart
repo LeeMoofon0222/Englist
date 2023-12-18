@@ -25,7 +25,7 @@ class Vocabulary {
 }
 
 class _VocabularyPageState extends State<VocabularyPage> {
-  String receivedWord = '';
+  String downWord = '';
   late Translation _translation;
   TranslationModel _translated =
       TranslationModel(translatedText: '', detectedSourceLanguage: '');
@@ -175,14 +175,27 @@ class _VocabularyPageState extends State<VocabularyPage> {
         builder: (context) {
           return AlertDialog(
             backgroundColor: Colors.grey[300],
-            title: const Text(
-              "確定要登出嗎，資料將遺失 登入以儲存資料",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 21,
-                  fontWeight: FontWeight.w500),
-              textAlign: TextAlign.center,
-            ),
+            title:
+              const Column(
+                children: [
+                  Text(
+                    "確定要登出嗎，資料將遺失",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 21,
+                        fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    "登入以儲存資料",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 21,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             actions: [
               TextButton(
                 onPressed: () {
@@ -265,12 +278,11 @@ class _VocabularyPageState extends State<VocabularyPage> {
                     icon: const Icon(Icons.autorenew),
                     iconSize: 30,
                     onPressed: () async {
-                      receivedWord = widget.text;
-                      if (vocabularyChineseController.text != '' &&
-                          vocabularyEnglishController.text == '') {
+                      if ((vocabularyChineseController.text != '' &&
+                          vocabularyEnglishController.text == '') || downWord != vocabularyChineseController.text) {
                         _translated = await _translation.translate(
                             text: vocabularyChineseController.text,
-                            to: 'en'); //更改語言
+                            to: 'en'); ////中文轉英文
                         vocabularyEnglishController.text =
                             _translated.translatedText;
                       } else {
@@ -279,7 +291,8 @@ class _VocabularyPageState extends State<VocabularyPage> {
                             to: 'zh-TW'); //更改語言
                         vocabularyChineseController.text =
                             _translated.translatedText;
-                      }
+                      } //英文轉中文
+                      downWord = vocabularyChineseController.text;
                     },
                   ),
                   SizedBox(
