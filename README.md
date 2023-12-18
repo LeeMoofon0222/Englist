@@ -9,4 +9,4 @@
 <h2>尚未達成之功能</h2>
 1. Fetch Google Translate 的 Data<br>
 2. 利用Chet GPT 提供的api實現造句與考試功能<br>
-3. 與Youtuber合作，使用者輸入店自由建後便會每個禮拜傳送免費電子報<br>
+3. 與Youtuber合作，使用者輸入電子郵件後便會每個禮拜傳送免費電子報<br>
