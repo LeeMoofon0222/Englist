@@ -42,6 +42,7 @@ dependencies:
   google_cloud_translation: ^0.0.3
   firebase_storage: ^11.2.8
   firebase_database: ^10.3.2
+  flutter_facebook_auth: ^5.0.11
 
 dev_dependencies:
   flutter_test:

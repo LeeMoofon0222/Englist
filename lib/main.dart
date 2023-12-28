@@ -55,7 +55,7 @@ class _BottomAppBarWidget extends State<BottomAppBarWidget> {
     return Container(
       color: Colors.grey[300],  // 設定整個底部區域的背景顏色
       child: BottomAppBar(
-        color: Colors.transparent, // 使 BottomAppBar 背景透明
+        color: Colors.grey[300], // 使 BottomAppBar 背景透明
         elevation: 0, // 取消陰影
         child: SizedBox(
           height: kBottomNavigationBarHeight,

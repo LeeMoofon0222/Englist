@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
         return AlertDialog(
           backgroundColor: Colors.grey[300],
           title: const Text(
-            "確定要以匿名帳號登入嗎",
+            "確定要以匿名帳號登入嗎，紀錄將不會儲存",
             style: TextStyle(color: Colors.black, fontSize: 21, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
           ),
@@ -184,7 +184,11 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(width: 40),
                   SquareTile(
                       imagePath: 'lib/images/Anonymous.png',
-                      onTap: () => anoMessage())
+                      onTap: () => anoMessage()),
+                  const SizedBox(width: 40),
+                  SquareTile(
+                      imagePath: 'lib/images/Facebook_icon.png',
+                      onTap: () => AuthService().signInWithFacebook())
                 ],
               ),
               const SizedBox(height: 20),

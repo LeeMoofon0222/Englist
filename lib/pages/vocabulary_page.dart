@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gt_test_app/Components/translateTextField.dart';
 import 'package:gt_test_app/Components/vocabularyItem.dart';
+import 'package:gt_test_app/pages/InPage_register_page.dart';
+import 'package:gt_test_app/pages/register_page.dart';
 import '../main.dart';
 import 'package:google_cloud_translation/google_cloud_translation.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -11,7 +13,7 @@ class VocabularyPage extends StatefulWidget {
   final String text;
   final Function()? onTap;
 
-  VocabularyPage({super.key, required this.text, required this.onTap});
+  const VocabularyPage({super.key, required this.text, required this.onTap});
 
   @override
   State<VocabularyPage> createState() => _VocabularyPageState();
@@ -29,6 +31,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
   late Translation _translation;
   TranslationModel _translated =
       TranslationModel(translatedText: '', detectedSourceLanguage: '');
+  bool goToLogin = false;
   final vocabularyEnglishController = TextEditingController();
   final vocabularyChineseController = TextEditingController();
   final translateController = TextEditingController();
@@ -41,7 +44,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
   @override
   void initState() {
     _translation = Translation(
-      apiKey: '', //填入API金鑰，為避免濫用，因此已隱藏
+      apiKey: 'AIzaSyDervpmYXev4zhSuKTgFC9SVnLfQYpRJNg', //填入API金鑰，為避免濫用，因此已隱藏
     );
     super.initState();
   }
@@ -191,7 +194,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 21,
-                        fontWeight: FontWeight.bold),
+                        fontWeight: FontWeight.w200),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -200,7 +203,9 @@ class _VocabularyPageState extends State<VocabularyPage> {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  widget.onTap!();
+                  setState(() {
+                    goToLogin = true; // 使用 setState 進行重繪
+                  });
                 },
                 child: const Text(
                   '登入',
@@ -366,22 +371,25 @@ class _VocabularyPageState extends State<VocabularyPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("收藏單字",
-            style: TextStyle(color: Colors.white, fontSize: 25)),
-        backgroundColor: Colors.grey[800],
-        iconTheme: const IconThemeData(color: Colors.white),
-        actions: [
-          IconButton(
-              onPressed: () {
-                showAlert(context);
-              },
-              icon: const Icon(
-                Icons.add,
-                size: 40,
-              )),
+    if(goToLogin){
+    return const InpageRegisterPage(onTap: null);
+    }
+    else{
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text("收藏單字",
+              style: TextStyle(color: Colors.white, fontSize: 25)),
+          backgroundColor: Colors.grey[800],
+          iconTheme: const IconThemeData(color: Colors.white),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  showAlert(context);
+                },
+                icon: const Icon(
+                  Icons.add,
+                  size: 40,
+                )),
             IconButton(
               onPressed: signUserOut,
               icon: const Icon(
@@ -390,19 +398,20 @@ class _VocabularyPageState extends State<VocabularyPage> {
               ),
               color: Colors.white,
             )
-        ],
-      ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        children: _vocabularies.map((Vocabulary vocabulary) {
-          return VocabularyItem(
-            vocabulary: vocabulary,
-            removeVocabulary: _deleteItem,
-          );
-        }).toList(),
-      ),
-      bottomNavigationBar: const BottomAppBarWidget(),
-      backgroundColor: Colors.grey[300],
-    );
+          ],
+        ),
+        body: ListView(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          children: _vocabularies.map((Vocabulary vocabulary) {
+            return VocabularyItem(
+              vocabulary: vocabulary,
+              removeVocabulary: _deleteItem,
+            );
+          }).toList(),
+        ),
+        bottomNavigationBar: const BottomAppBarWidget(),
+        backgroundColor: Colors.grey[300],
+      );
+    }
   }
 }

@@ -153,7 +153,7 @@ class _InPageRegisterPageState extends State<InpageRegisterPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Text(
-                        '使用其他帳號登入',
+                        '使用其他帳號註冊',
                         style: TextStyle(color: Colors.grey[800]),
                       ),
                     ),
