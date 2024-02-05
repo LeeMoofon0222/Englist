@@ -67,7 +67,7 @@ class _InPageRegisterPageState extends State<InpageRegisterPage> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: Colors.grey[100],
-          title: const Text("確定要以匿名帳號登入嗎",
+          title: const Text("確定要以訪客模式登入嗎?\n紀錄將不會儲存",
             style: TextStyle(color: Colors.black, fontSize: 21, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,),
           actions: [

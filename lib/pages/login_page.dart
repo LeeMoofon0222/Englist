@@ -66,9 +66,9 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Colors.grey[300],
+          backgroundColor: Colors.white,
           title: const Text(
-            "確定要以匿名帳號登入嗎，紀錄將不會儲存",
+            "確定要以訪客模式登入嗎?\n紀錄將不會儲存",
             style: TextStyle(color: Colors.black, fontSize: 21, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
           ),

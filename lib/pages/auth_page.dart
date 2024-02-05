@@ -17,7 +17,6 @@ class AuthPage extends StatelessWidget {
         .child("user")
         .child(uid)
         .set(data)
-        .whenComplete(() => print("finish"))
         .catchError((error) {
       print(error);
     });

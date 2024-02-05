@@ -66,8 +66,8 @@ class _RegisterPageState extends State<RegisterPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Colors.grey[100],
-          title: const Text("確定要以匿名帳號登入嗎",
+          backgroundColor: Colors.white,
+          title: const Text("確定要以訪客模式登入嗎?\n紀錄將不會儲存",
             style: TextStyle(color: Colors.black, fontSize: 21, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,),
           actions: [
@@ -171,7 +171,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 children: [
                   SquareTile(imagePath: 'lib/images/google.png',onTap: () => AuthService().signInWithGoogle()),
                   const SizedBox(width: 40),
-                  SquareTile(imagePath: 'lib/images/Anonymous.png', onTap: () => anoMessage())
+                  SquareTile(imagePath: 'lib/images/Anonymous.png', onTap: () => anoMessage()),
+                  const SizedBox(width: 40),
+                  SquareTile(
+                      imagePath: 'lib/images/Facebook_icon.png',
+                      onTap: () => AuthService().signInWithFacebook())
                 ],
               ),
               const SizedBox(height: 20),

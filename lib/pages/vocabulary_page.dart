@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:gt_test_app/Components/translateTextField.dart';
 import 'package:gt_test_app/Components/vocabularyItem.dart';
 import 'package:gt_test_app/pages/InPage_register_page.dart';
-import 'package:gt_test_app/pages/register_page.dart';
 import '../main.dart';
 import 'package:google_cloud_translation/google_cloud_translation.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -49,15 +48,19 @@ class _VocabularyPageState extends State<VocabularyPage> {
     super.initState();
   }
 
-/*
-  void _create(String mainWord, String associateWord) {
+
+  void _push(String mainWord, String associateWord) {
+    Map<String, String> vocab = {"mainWord": mainWord,"associateWord":associateWord};
+    firebaseDB.child('user').child(user!.uid).child('vocab').push().set(vocab);
+    /*
     mainList.add(mainWord);
     associateList.add(associateWord);
     Map<String, List<String>> data = {
       "mainWord": mainList,
       "associateWord": associateList
-    };
-
+    };*/
+  }
+/*
   void _read(String mainWord, String associateWord) {
     mainList.add(mainWord);
     associateList.add(associateWord);
@@ -127,8 +130,8 @@ class _VocabularyPageState extends State<VocabularyPage> {
   }
 
   void signUserOut() {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user?.email != null) {
+    //final user = FirebaseAuth.instance.currentUser;
+    //if (user?.email != null) {
       showDialog(
         context: context,
         builder: (context) {
@@ -172,80 +175,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
           );
         },
       );
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: Colors.grey[300],
-            title:
-              const Column(
-                children: [
-                  Text(
-                    "確定要登出嗎，資料將遺失",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 21,
-                        fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    "登入以儲存資料",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 21,
-                        fontWeight: FontWeight.w200),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  setState(() {
-                    goToLogin = true; // 使用 setState 進行重繪
-                  });
-                },
-                child: const Text(
-                  '登入',
-                  style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.blue,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  '取消',
-                  style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  FirebaseAuth.instance.signOut();
-                  /*Delete用戶*/
-                },
-                child: const Text(
-                  '確定',
-                  style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-            ],
-          );
-        },
-      );
-    }
+    //}
   }
 
   Future<void> showAlert(BuildContext context) {
@@ -284,7 +214,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
                     iconSize: 30,
                     onPressed: () async {
                       if ((vocabularyChineseController.text != '' &&
-                          vocabularyEnglishController.text == '') || downWord != vocabularyChineseController.text) {
+                          vocabularyEnglishController.text == '')) {
                         _translated = await _translation.translate(
                             text: vocabularyChineseController.text,
                             to: 'en'); ////中文轉英文
@@ -297,7 +227,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
                         vocabularyChineseController.text =
                             _translated.translatedText;
                       } //英文轉中文
-                      downWord = vocabularyChineseController.text;
+                      //downWord = vocabularyChineseController.text;
                     },
                   ),
                   SizedBox(
@@ -348,6 +278,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
                   Navigator.of(context).pop();
                   _addVocabulary(vocabularyEnglishController.text,
                       vocabularyChineseController.text);
+                  _push(vocabularyEnglishController.text,vocabularyChineseController.text);
                   vocabularyEnglishController.clear();
                   vocabularyChineseController.clear();
                 } else {
