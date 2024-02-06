@@ -42,32 +42,61 @@ class _VocabularyPageState extends State<VocabularyPage> {
 
   @override
   void initState() {
+    //_set(user?.email,user?.uid);
+    _fetch();
     _translation = Translation(
       apiKey: 'AIzaSyDervpmYXev4zhSuKTgFC9SVnLfQYpRJNg', //填入API金鑰，為避免濫用，因此已隱藏
     );
     super.initState();
   }
 
+  /*
+  void _set(email,uid) {
+    Map<String, String> data = {"Email": email};
+    firebaseDB
+        .child("user")
+        .child(uid)
+        .set(data)
+        .catchError((error) {
+      print(error);
+    });
+  }*/
 
   void _push(String mainWord, String associateWord) {
-    Map<String, String> vocab = {"mainWord": mainWord,"associateWord":associateWord};
-    firebaseDB.child('user').child(user!.uid).child('vocab').push().set(vocab);
-    /*
-    mainList.add(mainWord);
-    associateList.add(associateWord);
-    Map<String, List<String>> data = {
-      "mainWord": mainList,
-      "associateWord": associateList
-    };*/
-  }
-/*
-  void _read(String mainWord, String associateWord) {
-    mainList.add(mainWord);
-    associateList.add(associateWord);
-    Map<String, List<String>> data = {
-      "mainWord": mainList,
-      "associateWord": associateList
+    Map<String, String> vocab = {
+      "mainWord": mainWord,
+      "associateWord": associateWord
     };
+    firebaseDB
+        .child('user')
+        .child(user!.uid)
+        .child('EnglishVocab')
+        .push()
+        .set(vocab);
+  }
+
+  void _fetch() {
+    print(user!.uid);
+    firebaseDB
+        .child("user")
+        .child(user!.uid)
+        .child("EnglishVocab")
+        .once()
+        .then((DatabaseEvent databaseEvent) {
+      print(databaseEvent.snapshot.value);
+      Map<dynamic, dynamic>? userData =
+          databaseEvent.snapshot.value as Map<dynamic, dynamic>?;
+      setState(() {
+        userData?.forEach((key, value) {
+          _vocabularies.add(Vocabulary(
+              mainWord: value['mainWord'],
+              associateWord: value['associateWord']
+          ));
+        });
+      });
+      //print(databaseEvent.snapshot.value);
+    });
+  }
 
   void _update(String mainWord, String associateWord) {
     mainList.add(mainWord);
@@ -76,6 +105,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
       "mainWord": mainList,
       "associateWord": associateList
     };
+  }
 
   void _delete(String mainWord, String associateWord) {
     mainList.add(mainWord);
@@ -84,19 +114,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
       "mainWord": mainList,
       "associateWord": associateList
     };
-
-
   }
-  void _fetch(){
-    firebaseDB.child("user/${user?.uid}").once().then((DataSnapshot snapshot){
-      var user = snapshot.value;
-      setState((){
-        userSubject = user['userSubject'];
-      });
-    } as FutureOr Function(DatabaseEvent value)).catchError((error){
-      print(error);
-    });
-  }*/
 
   void _addVocabulary(String mainWord, String associateWord) {
     setState(() {
@@ -132,49 +150,47 @@ class _VocabularyPageState extends State<VocabularyPage> {
   void signUserOut() {
     //final user = FirebaseAuth.instance.currentUser;
     //if (user?.email != null) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: Colors.grey[300],
-            title: const Text(
-              "確定要登出嗎",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 21,
-                  fontWeight: FontWeight.w500),
-              textAlign: TextAlign.center,
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.grey[300],
+          title: const Text(
+            "確定要登出嗎",
+            style: TextStyle(
+                color: Colors.black, fontSize: 21, fontWeight: FontWeight.w500),
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                '取消',
+                style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500),
+              ),
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  '取消',
-                  style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500),
-                ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                FirebaseAuth.instance.signOut();
+              },
+              child: const Text(
+                '確定',
+                style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500),
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  FirebaseAuth.instance.signOut();
-                },
-                child: const Text(
-                  '確定',
-                  style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-            ],
-          );
-        },
-      );
+            ),
+          ],
+        );
+      },
+    );
     //}
   }
 
@@ -278,7 +294,8 @@ class _VocabularyPageState extends State<VocabularyPage> {
                   Navigator.of(context).pop();
                   _addVocabulary(vocabularyEnglishController.text,
                       vocabularyChineseController.text);
-                  _push(vocabularyEnglishController.text,vocabularyChineseController.text);
+                  _push(vocabularyEnglishController.text,
+                      vocabularyChineseController.text);
                   vocabularyEnglishController.clear();
                   vocabularyChineseController.clear();
                 } else {
@@ -299,50 +316,48 @@ class _VocabularyPageState extends State<VocabularyPage> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
+    /*
     if(goToLogin){
     return const InpageRegisterPage(onTap: null);
-    }
-    else{
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text("收藏單字",
-              style: TextStyle(color: Colors.white, fontSize: 25)),
-          backgroundColor: Colors.grey[800],
-          iconTheme: const IconThemeData(color: Colors.white),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  showAlert(context);
-                },
-                icon: const Icon(
-                  Icons.add,
-                  size: 40,
-                )),
-            IconButton(
-              onPressed: signUserOut,
+    }*/
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("收藏單字",
+            style: TextStyle(color: Colors.white, fontSize: 25)),
+        backgroundColor: Colors.grey[800],
+        iconTheme: const IconThemeData(color: Colors.white),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showAlert(context);
+              },
               icon: const Icon(
-                Icons.logout,
-                size: 30,
-              ),
-              color: Colors.white,
-            )
-          ],
-        ),
-        body: ListView(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          children: _vocabularies.map((Vocabulary vocabulary) {
-            return VocabularyItem(
-              vocabulary: vocabulary,
-              removeVocabulary: _deleteItem,
-            );
-          }).toList(),
-        ),
-        bottomNavigationBar: const BottomAppBarWidget(),
-        backgroundColor: Colors.grey[300],
-      );
-    }
+                Icons.add,
+                size: 40,
+              )),
+          IconButton(
+            onPressed: signUserOut,
+            icon: const Icon(
+              Icons.logout,
+              size: 30,
+            ),
+            color: Colors.white,
+          )
+        ],
+      ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        children: _vocabularies.map((Vocabulary vocabulary) {
+          return VocabularyItem(
+            vocabulary: vocabulary,
+            removeVocabulary: _deleteItem,
+          );
+        }).toList(),
+      ),
+      bottomNavigationBar: const BottomAppBarWidget(),
+      backgroundColor: Colors.grey[300],
+    );
   }
 }

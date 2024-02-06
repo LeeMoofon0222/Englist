@@ -11,16 +11,36 @@ class AuthPage extends StatelessWidget {
 
 
 
-  void _set(email,uid) {
-    Map<String, String> data = {"Email": email};
+  void _set(uid) {
     firebaseDB
         .child("user")
         .child(uid)
-        .set(data)
+        .once()  // 檢查節點是否存在
+        .then((DatabaseEvent databaseEvent) {
+      if (!databaseEvent.snapshot.exists) {
+        // 只有在節點不存在時才進行設置
+        firebaseDB
+            .child("user")
+            .child(uid)
+            .set(true);
+      }
+    })
         .catchError((error) {
       print(error);
     });
   }
+
+
+  /*
+  void _push(email,uid) {
+    Map<String, String> data = {"Email": email};
+
+    firebaseDB
+        .child('user').push()
+        .child(uid).push()
+        .push()
+        .set(data);
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +50,11 @@ class AuthPage extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+
             final user = FirebaseAuth.instance.currentUser;
+
             if (user != null) {
-              if(user.email!=null){
-                _set(user.email,user.uid);
-              }
-              else{
-                _set("Anonymous",user.uid);
-              }
+                _set(user.uid);
             }
             return const PageOrRegisterPage();
           } else {
