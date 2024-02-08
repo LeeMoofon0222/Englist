@@ -1,10 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gt_test_app/Components/translateTextField.dart';
 import 'package:gt_test_app/pages/vocabulary_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class VocabularyItem extends StatefulWidget {
-
   VocabularyItem({required this.vocabulary, required this.removeVocabulary})
       : super(key: ObjectKey(vocabulary));
 
@@ -15,15 +15,75 @@ class VocabularyItem extends StatefulWidget {
   State<VocabularyItem> createState() => _VocabularyItemState();
 }
 
-
-  class _VocabularyItemState extends State<VocabularyItem>{
+class _VocabularyItemState extends State<VocabularyItem> {
   final GlobalKey<_VocabularyItemState> _key = GlobalKey();
+  final user = FirebaseAuth.instance.currentUser;
   String mainWordText = "";
   String associateWordText = "";
   final vocabularyTranslateController = TextEditingController();
   final vocabularyDetectController = TextEditingController();
   DatabaseReference firebaseDB = FirebaseDatabase.instance.ref();
 
+  void _update(String bMainWord, String bAssociateWord, String aMainWord,
+      String aAssociateWord) {
+    Map<String, String> before = {
+      "mainWord": bMainWord,
+      "associateWord": bAssociateWord
+    };
+    Map<String, String> after = {
+      "mainWord": aMainWord,
+      "associateWord": aAssociateWord
+    };
+
+    firebaseDB
+        .child("user")
+        .child(user!.uid)
+        .child("EnglishVocab")
+        .once()
+        .then((DatabaseEvent databaseEvent) {
+      Map<dynamic, dynamic>? userVocab =
+          databaseEvent.snapshot.value as Map<dynamic, dynamic>?;
+      userVocab?.forEach((key, value) {
+        if (value['mainWord'] == before['mainWord'] &&
+            value['associateWord'] == before['associateWord']) {
+          firebaseDB
+              .child("user")
+              .child(user!.uid)
+              .child("EnglishVocab")
+              .child(key)
+              .update(after);
+        }
+      });
+    });
+  }
+
+  void _remove(String mainWord, String associateWord) {
+    Map<String, String> vocab = {
+      "mainWord": mainWord,
+      "associateWord": associateWord
+    };
+
+    firebaseDB
+        .child("user")
+        .child(user!.uid)
+        .child("EnglishVocab")
+        .once()
+        .then((DatabaseEvent databaseEvent) {
+      Map<dynamic, dynamic>? userVocab =
+      databaseEvent.snapshot.value as Map<dynamic, dynamic>?;
+      userVocab?.forEach((key, value) {
+        if (value['mainWord'] == vocab['mainWord'] &&
+            value['associateWord'] == vocab['associateWord']) {
+          firebaseDB
+              .child("user")
+              .child(user!.uid)
+              .child("EnglishVocab")
+              .child(key)
+              .remove();
+        }
+      });
+    });
+  }
 
   void showAlert(BuildContext context) {
     showDialog(
@@ -74,6 +134,7 @@ class VocabularyItem extends StatefulWidget {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
+                  _remove(vocabularyDetectController.text,vocabularyTranslateController.text);
                   widget.removeVocabulary(widget.vocabulary);
                 },
                 child: const Text(
@@ -102,8 +163,15 @@ class VocabularyItem extends StatefulWidget {
                   setState(() {
                     mainWordText = vocabularyDetectController.text;
                     associateWordText = vocabularyTranslateController.text;
-                    widget.vocabulary.mainWord = vocabularyDetectController.text;
-                    widget.vocabulary.associateWord = vocabularyTranslateController.text;
+                    _update(
+                        widget.vocabulary.mainWord,
+                        widget.vocabulary.associateWord,
+                        mainWordText,
+                        associateWordText);
+                    widget.vocabulary.mainWord =
+                        vocabularyDetectController.text;
+                    widget.vocabulary.associateWord =
+                        vocabularyTranslateController.text;
                   });
                 },
                 child: const Text(
@@ -116,8 +184,7 @@ class VocabularyItem extends StatefulWidget {
               ),
             ],
           );
-        }
-    );
+        });
   }
 
   void removeWidget() {
@@ -130,10 +197,10 @@ class VocabularyItem extends StatefulWidget {
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-  mainWordText = widget.vocabulary.mainWord;
-  associateWordText = widget.vocabulary.associateWord;
+    mainWordText = widget.vocabulary.mainWord;
+    associateWordText = widget.vocabulary.associateWord;
   }
 
   @override
@@ -164,12 +231,12 @@ class VocabularyItem extends StatefulWidget {
           alignment: Alignment.topLeft,
           onPressed: () {
             vocabularyDetectController.text = widget.vocabulary.mainWord;
-            vocabularyTranslateController.text = widget.vocabulary.associateWord;
+            vocabularyTranslateController.text =
+                widget.vocabulary.associateWord;
             showAlert(context);
           },
         ),
-      ]
-      ),
+      ]),
       //subtitle: Text(vocabulary.associateWord, style: const TextStyle(color: Colors.black, fontSize: 15)),
     );
   }

@@ -65,25 +65,25 @@ class _BottomAppBarWidget extends State<BottomAppBarWidget> {
               IconButton(
                 icon: const Icon(Icons.book_outlined, size: 30,),
                 onPressed: () {
-                  Navigator.popAndPushNamed(context, '/VP');
+                  Navigator.pushNamed(context, '/VP');
                 },
               ),
               IconButton(
                 icon: const Icon(Icons.drive_file_rename_outline_outlined, size: 30,),
                 onPressed: () {
-                  Navigator.popAndPushNamed(context, '/TP');
+                  Navigator.pushNamed(context, '/TP');
                 },
               ),
               IconButton(
                 icon: const Icon(Icons.settings, size: 30,),
                 onPressed: () {
-                  Navigator.popAndPushNamed(context, '/SP');
+                  Navigator.pushNamed(context, '/SP');
                 },
               ),
               IconButton(
                 icon: const Icon(Icons.account_box, size: 30,),
                 onPressed: () {
-                  Navigator.popAndPushNamed(context, '/AP');
+                  Navigator.pushNamed(context, '/AP');
                 },
               ),
             ],

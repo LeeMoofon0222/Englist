@@ -24,23 +24,8 @@ class AuthPage extends StatelessWidget {
             .child(uid)
             .set(true);
       }
-    })
-        .catchError((error) {
-      print(error);
     });
   }
-
-
-  /*
-  void _push(email,uid) {
-    Map<String, String> data = {"Email": email};
-
-    firebaseDB
-        .child('user').push()
-        .child(uid).push()
-        .push()
-        .set(data);
-  }*/
 
   @override
   Widget build(BuildContext context) {
