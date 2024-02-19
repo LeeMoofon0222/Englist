@@ -1,12 +1,15 @@
-# gt_test_app
-<h2>介紹</h2>
-這是使用Flutter作出來的App，利用fire base實作登入驗證以及註冊介面，達成email登入、匿名登入，以及google登入功能。在進去頁面後。我則是串接cloud translate api與Real time storage，兩個api實現自動翻譯的功能與CRUD的功能。<br><br>在不久後會上架Play商城
-<h2>實機畫面</h2>
+# Englist
+<h2>Concept</h2>
+Our goal is to enable users to effortlessly collect words they want to remember into their notes anytime, anywhere. Whether it's waiting for the bus, during lunch break, or leisure time at home, learning can take place. Furthermore, through a LINE Bot, customized newsletters created by ChatGPT are sent to users, providing the most suitable review content based on their learning status and progress. This allows users to effectively reinforce what they have learned in a relaxed environment.
+<h2>Creation Inception</h2>
+The author often encounters unfamiliar words while reading English articles and wishes to record them. However, there is a lack of applications on the market that can quickly collect words and facilitate effective review. Therefore, based on this need, the author created this product.
+<h2>Feature Description</h2>
+Save words anytime, anywhere:
+Allows users to instantly translate and add words to their vocabulary while reading any web page.
+Optimize reviews:
+Use ChatGPT to tailor sentences for users to review from their vocabulary and send them via LINE Bot.
+<h2>Screen Shot</h2>
 <img src="https://github.com/LeeMoofon0222/gt_test_app/blob/master/ReadMe_Picture/Pic1.png?raw=true">
 <img src="https://github.com/LeeMoofon0222/gt_test_app/blob/master/ReadMe_Picture/Pic2.png?raw=true">
 <img src="https://github.com/LeeMoofon0222/gt_test_app/blob/master/ReadMe_Picture/Pic3.png?raw=true">
 <img src="https://github.com/LeeMoofon0222/gt_test_app/blob/master/ReadMe_Picture/Pic4.png?raw=true">
-<h2>尚未達成之功能</h2>
-1. Fetch Google Translate 的 Data<br>
-2. 利用Chet GPT 提供的api實現造句與考試功能<br>
-3. 與Youtuber合作，使用者輸入電子郵件後便會每個禮拜傳送免費電子報<br>
