@@ -80,17 +80,6 @@ class _VocabularyPageState extends State<VocabularyPage> {
     });
   }
 
-
-
-  void _delete(String mainWord, String associateWord) {
-    mainList.add(mainWord);
-    associateList.add(associateWord);
-    Map<String, List<String>> data = {
-      "mainWord": mainList,
-      "associateWord": associateList
-    };
-  }
-
   void _addVocabulary(String mainWord, String associateWord) {
     setState(() {
       _vocabularies

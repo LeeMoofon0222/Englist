@@ -34,11 +34,6 @@ class AuthService{
   signInWithFacebook() async {
     final LoginResult result = await FacebookAuth.instance.login();
 
-    //final graphResponse = await http.get(Uri.parse(
-    //'https://graph.facebook.com/v2.12/me?fields=name,picture.width(800).height(800),first_name,last_name,email&access_token=${result.accessToken!.token}'));
-
-    //final profile = jsonDecode(graphResponse.body);
-
     if (result.status == LoginStatus.success) {
       final OAuthCredential credential =
       FacebookAuthProvider.credential(result.accessToken!.token);

@@ -20,6 +20,7 @@ class _VocabularyItemState extends State<VocabularyItem> {
   final user = FirebaseAuth.instance.currentUser;
   String mainWordText = "";
   String associateWordText = "";
+  IconData starData = Icons.star_border;
   final vocabularyTranslateController = TextEditingController();
   final vocabularyDetectController = TextEditingController();
   DatabaseReference firebaseDB = FirebaseDatabase.instance.ref();
@@ -70,7 +71,7 @@ class _VocabularyItemState extends State<VocabularyItem> {
         .once()
         .then((DatabaseEvent databaseEvent) {
       Map<dynamic, dynamic>? userVocab =
-      databaseEvent.snapshot.value as Map<dynamic, dynamic>?;
+          databaseEvent.snapshot.value as Map<dynamic, dynamic>?;
       userVocab?.forEach((key, value) {
         if (value['mainWord'] == vocab['mainWord'] &&
             value['associateWord'] == vocab['associateWord']) {
@@ -134,7 +135,8 @@ class _VocabularyItemState extends State<VocabularyItem> {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  _remove(vocabularyDetectController.text,vocabularyTranslateController.text);
+                  _remove(vocabularyDetectController.text,
+                      vocabularyTranslateController.text);
                   widget.removeVocabulary(widget.vocabulary);
                 },
                 child: const Text(
@@ -206,37 +208,57 @@ class _VocabularyItemState extends State<VocabularyItem> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {},
-      title: Row(children: <Widget>[
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                mainWordText,
-                style: const TextStyle(color: Colors.black, fontSize: 28),
+      //onTap: () {},
+      title: Row(
+          mainAxisAlignment: MainAxisAlignment.start, // 讓所有子元件靠近 Row 的開始位置
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    mainWordText,
+                    style: const TextStyle(color: Colors.black, fontSize: 28),
+                  ),
+                  Text(
+                    associateWordText,
+                    style: const TextStyle(color: Colors.black, fontSize: 23),
+                  ),
+                ],
               ),
-              Text(
-                associateWordText,
-                style: const TextStyle(color: Colors.black, fontSize: 23),
+            ),
+            IconButton(
+                padding: EdgeInsets.zero, // 將填充設置為零
+                onPressed: () {
+                  setState(() {
+                    // 在按下時更新圖標
+                    if (starData == Icons.star_border) {
+                      starData = Icons.star; // 切換為 star
+                    } else {
+                      starData = Icons.star_border; // 切換為 star_border
+                    }
+                  });
+                },
+                alignment: Alignment.centerLeft,
+                icon: Icon(
+                  starData,
+                  size: 35,
+                )),
+            const SizedBox(width: 10),
+            IconButton(
+              iconSize: 30,
+              icon: const Icon(
+                Icons.edit,
               ),
-            ],
-          ),
-        ),
-        IconButton(
-          iconSize: 30,
-          icon: const Icon(
-            Icons.edit,
-          ),
-          alignment: Alignment.topLeft,
-          onPressed: () {
-            vocabularyDetectController.text = widget.vocabulary.mainWord;
-            vocabularyTranslateController.text =
-                widget.vocabulary.associateWord;
-            showAlert(context);
-          },
-        ),
-      ]),
+              alignment: Alignment.topLeft,
+              onPressed: () {
+                vocabularyDetectController.text = widget.vocabulary.mainWord;
+                vocabularyTranslateController.text =
+                    widget.vocabulary.associateWord;
+                showAlert(context);
+              },
+            ),
+          ]),
       //subtitle: Text(vocabulary.associateWord, style: const TextStyle(color: Colors.black, fontSize: 15)),
     );
   }
