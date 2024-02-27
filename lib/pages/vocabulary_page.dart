@@ -18,13 +18,18 @@ class VocabularyPage extends StatefulWidget {
 }
 
 class Vocabulary {
-  Vocabulary({required this.mainWord, required this.associateWord});
+  Vocabulary(
+      {required this.mainWord,
+      required this.associateWord,
+      required this.ifStore});
 
   String mainWord;
   String associateWord;
+  String ifStore;
 }
 
-class _VocabularyPageState extends State<VocabularyPage> {
+class _VocabularyPageState extends State<VocabularyPage>
+    with AutomaticKeepAliveClientMixin {
   String downWord = '';
   late Translation _translation;
   TranslationModel _translated =
@@ -38,19 +43,24 @@ class _VocabularyPageState extends State<VocabularyPage> {
   final user = FirebaseAuth.instance.currentUser;
   final List<String> mainList = [];
   final List<String> associateList = [];
+  final List<String> storeList = [];
+  late bool storeVocab = false;
+  IconData starData = Icons.star_border;
 
   @override
   void initState() {
+    super.initState();
     _fetch();
     _translation = Translation(
       apiKey: 'AIzaSyDervpmYXev4zhSuKTgFC9SVnLfQYpRJNg', //填入API金鑰，為避免濫用，因此已隱藏
     );
-    super.initState();
   }
-  void _push(String mainWord, String associateWord) {
+
+  void _push(String mainWord, String associateWord, String ifStore) {
     Map<String, String> vocab = {
       "mainWord": mainWord,
-      "associateWord": associateWord
+      "associateWord": associateWord,
+      "ifStore": ifStore
     };
     firebaseDB
         .child('user')
@@ -73,17 +83,17 @@ class _VocabularyPageState extends State<VocabularyPage> {
         userData?.forEach((key, value) {
           _vocabularies.add(Vocabulary(
               mainWord: value['mainWord'],
-              associateWord: value['associateWord']
-          ));
+              associateWord: value['associateWord'],
+              ifStore: value['ifStore']));
         });
       });
     });
   }
 
-  void _addVocabulary(String mainWord, String associateWord) {
+  void _addVocabulary(String mainWord, String associateWord, String ifStore) {
     setState(() {
-      _vocabularies
-          .add(Vocabulary(mainWord: mainWord, associateWord: associateWord));
+      _vocabularies.add(Vocabulary(
+          mainWord: mainWord, associateWord: associateWord, ifStore: ifStore));
     });
   }
 
@@ -254,9 +264,9 @@ class _VocabularyPageState extends State<VocabularyPage> {
                     vocabularyEnglishController.text != "") {
                   Navigator.of(context).pop();
                   _addVocabulary(vocabularyEnglishController.text,
-                      vocabularyChineseController.text);
+                      vocabularyChineseController.text, "false");
                   _push(vocabularyEnglishController.text,
-                      vocabularyChineseController.text);
+                      vocabularyChineseController.text, "false");
                   vocabularyEnglishController.clear();
                   vocabularyChineseController.clear();
                 } else {
@@ -276,9 +286,9 @@ class _VocabularyPageState extends State<VocabularyPage> {
       },
     );
   }
-
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("收藏單字",
@@ -286,6 +296,21 @@ class _VocabularyPageState extends State<VocabularyPage> {
         backgroundColor: Colors.grey[800],
         iconTheme: const IconThemeData(color: Colors.white),
         actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  if (starData == Icons.star_border) {
+                    starData = Icons.star;
+                  } else {
+                    starData = Icons.star_border;
+                  }
+                  storeVocab = !storeVocab;
+                });
+              },
+              icon: Icon(
+                starData,
+                size: 38,
+              )),
           IconButton(
               onPressed: () {
                 showAlert(context);
@@ -307,14 +332,30 @@ class _VocabularyPageState extends State<VocabularyPage> {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         children: _vocabularies.map((Vocabulary vocabulary) {
-          return VocabularyItem(
-            vocabulary: vocabulary,
-            removeVocabulary: _deleteItem,
-          );
+          if (storeVocab && vocabulary.ifStore == "true") {
+              return VocabularyItem(
+                vocabulary: vocabulary,
+                removeVocabulary: _deleteItem,
+              );
+          }
+          else if(!storeVocab)
+          {
+            return VocabularyItem(
+              vocabulary: vocabulary,
+              removeVocabulary: _deleteItem,
+            );
+          }
+          else{
+            return Container();
+          }
         }).toList(),
       ),
       bottomNavigationBar: const BottomAppBarWidget(),
+      drawer: const BurgerDrawerWidget(),
       backgroundColor: Colors.grey[300],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -2,13 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../main.dart';
 
-class TestPage extends StatelessWidget {
+class TestPage extends StatefulWidget
+{
   const TestPage({super.key});
+
+  @override
+  State<TestPage> createState() => _TestPagePageState();
+}
+class _TestPagePageState extends State<TestPage> with AutomaticKeepAliveClientMixin{
+
   void signUserOut() {
     FirebaseAuth.instance.signOut();
   }
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("測驗",
@@ -30,4 +38,7 @@ class TestPage extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

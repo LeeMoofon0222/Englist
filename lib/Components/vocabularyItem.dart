@@ -20,20 +20,23 @@ class _VocabularyItemState extends State<VocabularyItem> {
   final user = FirebaseAuth.instance.currentUser;
   String mainWordText = "";
   String associateWordText = "";
-  IconData starData = Icons.star_border;
+  late IconData starData;
   final vocabularyTranslateController = TextEditingController();
   final vocabularyDetectController = TextEditingController();
   DatabaseReference firebaseDB = FirebaseDatabase.instance.ref();
 
+
+
   void _update(String bMainWord, String bAssociateWord, String aMainWord,
-      String aAssociateWord) {
+      String aAssociateWord, String ifStore) {
     Map<String, String> before = {
       "mainWord": bMainWord,
       "associateWord": bAssociateWord
     };
     Map<String, String> after = {
       "mainWord": aMainWord,
-      "associateWord": aAssociateWord
+      "associateWord": aAssociateWord,
+      "ifStore": ifStore
     };
 
     firebaseDB
@@ -169,7 +172,8 @@ class _VocabularyItemState extends State<VocabularyItem> {
                         widget.vocabulary.mainWord,
                         widget.vocabulary.associateWord,
                         mainWordText,
-                        associateWordText);
+                        associateWordText,
+                        widget.vocabulary.ifStore);
                     widget.vocabulary.mainWord =
                         vocabularyDetectController.text;
                     widget.vocabulary.associateWord =
@@ -203,62 +207,73 @@ class _VocabularyItemState extends State<VocabularyItem> {
     super.initState();
     mainWordText = widget.vocabulary.mainWord;
     associateWordText = widget.vocabulary.associateWord;
+    if(widget.vocabulary.ifStore=="true"){
+      starData = Icons.star;
+    }
+    else{
+      starData = Icons.star_border;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      //onTap: () {},
-      title: Row(
-          mainAxisAlignment: MainAxisAlignment.start, // 讓所有子元件靠近 Row 的開始位置
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
+      onTap: () {},
+      title: Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                mainWordText,
+                style: const TextStyle(color: Colors.black, fontSize: 28),
+              ),
+              Text(
+                associateWordText,
+                style: const TextStyle(color: Colors.black, fontSize: 23),
+              ),
+            ],
+          ),
+        ),
+        IconButton(
+            onPressed: () {
+              setState(() {
+                if (starData == Icons.star_border) {
+                  starData = Icons.star;
+                  widget.vocabulary.ifStore = "true";
+                } else {
+                  widget.vocabulary.ifStore = "false";
+                  starData = Icons.star_border;
+                }
+                _update(
+                    widget.vocabulary.mainWord,
+                    widget.vocabulary.associateWord,
                     mainWordText,
-                    style: const TextStyle(color: Colors.black, fontSize: 28),
-                  ),
-                  Text(
                     associateWordText,
-                    style: const TextStyle(color: Colors.black, fontSize: 23),
-                  ),
-                ],
-              ),
-            ),
-            IconButton(
-                padding: EdgeInsets.zero, // 將填充設置為零
-                onPressed: () {
-                  setState(() {
-                    // 在按下時更新圖標
-                    if (starData == Icons.star_border) {
-                      starData = Icons.star; // 切換為 star
-                    } else {
-                      starData = Icons.star_border; // 切換為 star_border
-                    }
-                  });
-                },
-                alignment: Alignment.centerLeft,
-                icon: Icon(
-                  starData,
-                  size: 35,
-                )),
-            const SizedBox(width: 10),
-            IconButton(
-              iconSize: 30,
-              icon: const Icon(
-                Icons.edit,
-              ),
-              alignment: Alignment.topLeft,
-              onPressed: () {
-                vocabularyDetectController.text = widget.vocabulary.mainWord;
-                vocabularyTranslateController.text =
-                    widget.vocabulary.associateWord;
-                showAlert(context);
-              },
-            ),
-          ]),
+                    widget.vocabulary.ifStore);
+              });
+
+            },
+            alignment: Alignment.centerLeft,
+            icon: Icon(
+              starData,
+              size: 35,
+            )),
+        const SizedBox(width: 10),
+        IconButton(
+          iconSize: 30,
+          icon: const Icon(
+            Icons.edit,
+          ),
+          alignment: Alignment.topLeft,
+          onPressed: () {
+            vocabularyDetectController.text = widget.vocabulary.mainWord;
+            vocabularyTranslateController.text =
+                widget.vocabulary.associateWord;
+            showAlert(context);
+          },
+        ),
+      ]),
       //subtitle: Text(vocabulary.associateWord, style: const TextStyle(color: Colors.black, fontSize: 15)),
     );
   }
