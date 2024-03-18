@@ -147,9 +147,10 @@ class _VocabularyPageState extends State<VocabularyPage>
               ),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
-                FirebaseAuth.instance.signOut();
+                await FirebaseAuth.instance.signOut();
+                Navigator.pushReplacementNamed(context, '/');
               },
               child: const Text(
                 '確定',
@@ -163,7 +164,6 @@ class _VocabularyPageState extends State<VocabularyPage>
         );
       },
     );
-    //}
   }
 
   Future<void> showAlert(BuildContext context) {

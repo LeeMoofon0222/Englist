@@ -4,6 +4,8 @@ import 'package:gt_test_app/Components/translateTextField.dart';
 import 'package:gt_test_app/pages/vocabulary_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+import '../pages/sentence_page.dart';
+
 class VocabularyItem extends StatefulWidget {
   VocabularyItem({required this.vocabulary, required this.removeVocabulary})
       : super(key: ObjectKey(vocabulary));
@@ -193,6 +195,15 @@ class _VocabularyItemState extends State<VocabularyItem> {
         });
   }
 
+  void showSentenceAlert(BuildContext context) {
+    Navigator.push(context,
+      MaterialPageRoute(
+        builder: (context) => SentencePage(
+          word: mainWordText,
+        ),
+      ),);
+  }
+
   void removeWidget() {
     final state = _key.currentState;
     if (state != null) {
@@ -218,7 +229,10 @@ class _VocabularyItemState extends State<VocabularyItem> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {},
+      onTap: ()
+      {
+        showSentenceAlert(context);
+      },
       title: Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
         Expanded(
           child: Column(

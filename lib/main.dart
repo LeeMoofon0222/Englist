@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gt_test_app/pages/auth_page.dart';
+import 'package:gt_test_app/pages/login_page.dart';
+import 'package:gt_test_app/pages/sentence_page.dart';
 import 'pages/aboutme_page.dart';
 import 'pages/setting_page.dart';
 import 'pages/vocabulary_page.dart';
@@ -33,7 +35,7 @@ class MyApp extends StatelessWidget {
             ),
         '/TP': (context) => const TestPage(),
         '/SP': (context) => const SettingPage(),
-        '/AP': (context) => const AboutMePage()
+        '/AP': (context) => const AboutMePage(),
       },
     );
   }
@@ -116,67 +118,49 @@ class _BurgerDrawerWidget extends State<BurgerDrawerWidget> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.grey[800],
       child: ListView(
-        children: <Widget>[
+        children: [
           DrawerHeader(
-            decoration: BoxDecoration(color: Colors.grey[800]),
-            child: const Stack(
+            child: Stack(
               children: [
-                Text(
-                  'Menu',
-                  textAlign: TextAlign.center,
-                  strutStyle: StrutStyle(
-                    fontSize: 100,
-                    leading: 0,
-                    height: 1.1,
-                    forceStrutHeight: true,
+                Positioned(
+                  bottom: 8.0,
+                  left: 4.0,
+                  child: Text(
+                    "Menu",
+                    style: TextStyle(color: Colors.white, fontSize: 40),
                   ),
-                  style: TextStyle(
-                      fontSize: 40.0,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white),
-                ),
+                )
               ],
             ),
+            decoration: BoxDecoration(
+              color: Colors.red,
+              image: DecorationImage(
+                image: ExactAssetImage('lib/images/google.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
           ListTile(
-            leading: const Icon(Icons.access_alarms),
-            title: const Text(
-              '首頁',
-              style: TextStyle(fontSize: 30.0, color: Colors.white),
-            ),
-            onTap: () {
-              //Navigator.popAndPushNamed(context, '/');
-            },
+            leading: Icon(Icons.home),
+            title: Text("Home"),
+            onTap: () {},
           ),
           ListTile(
-            title: const Text(
-              '陽明山步道',
-              style: TextStyle(fontSize: 30, color: Colors.white),
-            ),
-            onTap: () {
-              //Navigator.popAndPushNamed(context, '/YM');
-            },
+            leading: Icon(Icons.account_box),
+            title: Text("About"),
+            onTap: () {},
           ),
           ListTile(
-            title: const Text(
-              '合歡山步道',
-              style: TextStyle(fontSize: 30.0, color: Colors.white),
-            ),
-            onTap: () {
-              //Navigator.popAndPushNamed(context, '/HH');
-            },
+            leading: Icon(Icons.grid_3x3_outlined),
+            title: Text("Products"),
+            onTap: () {},
           ),
           ListTile(
-            title: const Text(
-              '雪山步道',
-              style: TextStyle(fontSize: 30.0, color: Colors.white),
-            ),
-            onTap: () {
-              //Navigator.popAndPushNamed(context, '/SM');
-            },
-          ),
+            leading: Icon(Icons.contact_mail),
+            title: Text("Contact"),
+            onTap: () {},
+          )
         ],
       ),
     );
