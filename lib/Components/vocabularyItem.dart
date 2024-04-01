@@ -200,6 +200,7 @@ class _VocabularyItemState extends State<VocabularyItem> {
       MaterialPageRoute(
         builder: (context) => SentencePage(
           word: mainWordText,
+          associateWord: associateWordText
         ),
       ),);
   }
@@ -274,6 +275,7 @@ class _VocabularyItemState extends State<VocabularyItem> {
               size: 35,
             )),
         const SizedBox(width: 10),
+
         IconButton(
           iconSize: 30,
           icon: const Icon(
