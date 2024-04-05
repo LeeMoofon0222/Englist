@@ -200,7 +200,9 @@ class _VocabularyItemState extends State<VocabularyItem> {
       MaterialPageRoute(
         builder: (context) => SentencePage(
           word: mainWordText,
-          associateWord: associateWordText
+          associateWord: associateWordText,
+            sentence: widget.vocabulary.sentence,
+          associateSentence: widget.vocabulary.associateSentence
         ),
       ),);
   }

@@ -15,10 +15,9 @@ class AuthPage extends StatelessWidget {
     firebaseDB
         .child("user")
         .child(uid)
-        .once()  // 檢查節點是否存在
+        .once()
         .then((DatabaseEvent databaseEvent) {
       if (!databaseEvent.snapshot.exists) {
-        // 只有在節點不存在時才進行設置
         firebaseDB
             .child("user")
             .child(uid)

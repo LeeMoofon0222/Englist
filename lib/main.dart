@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gt_test_app/pages/auth_page.dart';
-import 'package:gt_test_app/pages/login_page.dart';
-import 'package:gt_test_app/pages/sentence_page.dart';
 import 'pages/aboutme_page.dart';
 import 'pages/setting_page.dart';
 import 'pages/vocabulary_page.dart';
@@ -14,6 +13,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await dotenv.load(fileName: '.env');
   runApp(const MyApp());
 }
 

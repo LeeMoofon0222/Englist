@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gt_test_app/Components/translateTextField.dart';
 import 'package:gt_test_app/Components/vocabularyItem.dart';
 import '../main.dart';
@@ -21,15 +22,20 @@ class Vocabulary {
   Vocabulary(
       {required this.mainWord,
       required this.associateWord,
+        required this.sentence,
+        required this.associateSentence,
       required this.ifStore});
 
   String mainWord;
   String associateWord;
+  String sentence;
+  String associateSentence;
   String ifStore;
 }
 
 class _VocabularyPageState extends State<VocabularyPage>
     with AutomaticKeepAliveClientMixin {
+  final translateApiKey = dotenv.env['TRANSLATE_API_KEY'];
   String downWord = '';
   late Translation _translation;
   TranslationModel _translated =
@@ -52,15 +58,17 @@ class _VocabularyPageState extends State<VocabularyPage>
     super.initState();
     _fetch();
     _translation = Translation(
-      apiKey: 'AIzaSyDervpmYXev4zhSuKTgFC9SVnLfQYpRJNg', //填入API金鑰，為避免濫用，因此已隱藏
+      apiKey: '$translateApiKey',
     );
   }
 
-  void _push(String mainWord, String associateWord, String ifStore) {
+  void _push(String mainWord, String associateWord, String ifStore, String sentence, String associateSentence) {
     Map<String, String> vocab = {
       "mainWord": mainWord,
       "associateWord": associateWord,
-      "ifStore": ifStore
+      "ifStore": ifStore,
+      "sentence": "",
+      "associateSentence": ""
     };
     firebaseDB
         .child('user')
@@ -84,6 +92,8 @@ class _VocabularyPageState extends State<VocabularyPage>
           _vocabularies.add(Vocabulary(
               mainWord: value['mainWord'],
               associateWord: value['associateWord'],
+              sentence: value['sentence'],
+              associateSentence: value['associateSentence'],
               ifStore: value['ifStore']));
         });
       });
@@ -93,7 +103,7 @@ class _VocabularyPageState extends State<VocabularyPage>
   void _addVocabulary(String mainWord, String associateWord, String ifStore) {
     setState(() {
       _vocabularies.add(Vocabulary(
-          mainWord: mainWord, associateWord: associateWord, ifStore: ifStore));
+          mainWord: mainWord, associateWord: associateWord, ifStore: ifStore, sentence: "", associateSentence: ""));
     });
   }
 
@@ -266,7 +276,7 @@ class _VocabularyPageState extends State<VocabularyPage>
                   _addVocabulary(vocabularyEnglishController.text,
                       vocabularyChineseController.text, "false");
                   _push(vocabularyEnglishController.text,
-                      vocabularyChineseController.text, "false");
+                      vocabularyChineseController.text, "false", "", "");
                   vocabularyEnglishController.clear();
                   vocabularyChineseController.clear();
                 } else {
