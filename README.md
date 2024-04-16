@@ -9,6 +9,7 @@ Allows users to instantly translate and add words to their vocabulary while read
 Optimize reviews:
 Use ChatGPT to tailor sentences for users to review from their vocabulary and send them via LINE Bot.
 <h2>Screen Shot</h2>
+<img src="https://github.com/LeeMoofon0222/Picture-Repository/blob/main/Pictures/Englist.png?raw=true">
 <img src="https://github.com/LeeMoofon0222/gt_test_app/blob/master/ReadMe_Picture/Pic1.png?raw=true">
 <img src="https://github.com/LeeMoofon0222/gt_test_app/blob/master/ReadMe_Picture/Pic2.png?raw=true">
 <img src="https://github.com/LeeMoofon0222/gt_test_app/blob/master/ReadMe_Picture/Pic3.png?raw=true">
