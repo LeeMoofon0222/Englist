@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:gt_test_app/Components/translateTextField.dart';
 import 'package:gt_test_app/pages/vocabulary_page.dart';
 import 'package:firebase_database/firebase_database.dart';
-
 import '../pages/sentence_page.dart';
 
 class VocabularyItem extends StatefulWidget {

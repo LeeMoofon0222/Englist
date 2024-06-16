@@ -1,6 +1,6 @@
 {
-    "name": "gt_test_app",
-    "short_name": "gt_test_app",
+    "name": "englist",
+    "short_name": "englist",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

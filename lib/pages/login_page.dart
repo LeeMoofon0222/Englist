@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
         return AlertDialog(
           backgroundColor: Colors.white,
           title: const Text(
-            "確定要以訪客模式登入嗎?\n紀錄將不會儲存",
+            "Login with Anonymous ?\nRecords will not be saved",
             style: TextStyle(color: Colors.black, fontSize: 21, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
           ),
@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                 Navigator.of(context).pop();
               },
               child: const Text(
-                '取消',
+                'cancel',
                 style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.w500),
               ),
             ),
@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                 //AuthPage("Anonymous", "Anonymous");
               },
               child: const Text(
-                '確定',
+                'yes',
                 style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.w500),
               ),
             ),
@@ -116,19 +116,19 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 10),
               Text(
-                "歡迎回來!",
+                "Welcome Back",
                 style: TextStyle(color: Colors.grey[700], fontSize: 25),
               ),
               const SizedBox(height: 25),
               MyTextField(
                 controller: emailController,
-                hintText: '電子郵件',
+                hintText: 'email',
                 obscureText: false,
               ),
               const SizedBox(height: 10),
               MyTextField(
                 controller: passwordController,
-                hintText: '密碼',
+                hintText: 'password',
                 obscureText: true,
               ),
               const SizedBox(height: 10),
@@ -138,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      '忘記密碼?',
+                      'forgot password?',
                       style: TextStyle(color: Colors.black, fontSize: 15),
                     ),
                   ],
@@ -146,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 20),
               MyButton(
-                text: "登入",
+                text: "Login",
                 onTap: sign,
               ),
               const SizedBox(height: 20),
@@ -162,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Text(
-                        '使用其他帳號登入',
+                        'login with another account',
                         style: TextStyle(color: Colors.grey[800]),
                       ),
                     ),
@@ -187,23 +187,23 @@ class _LoginPageState extends State<LoginPage> {
                       onTap: () => anoMessage()),
                   const SizedBox(width: 40),
                   SquareTile(
-                      imagePath: 'lib/images/Facebook_icon.png',
+                      imagePath: 'lib/images/facebook.png',
                       onTap: () => AuthService().signInWithFacebook())
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '還沒有帳號?',
+                    'Have no account? ',
                     style: TextStyle(color: Colors.grey[700]),
                   ),
                   const SizedBox(height: 4),
                   GestureDetector(
                     onTap: widget.onTap,
                     child: const Text(
-                      '現在註冊',
+                      'register now',
                       style: TextStyle(
                           color: Colors.blue, fontWeight: FontWeight.bold),
                     ),

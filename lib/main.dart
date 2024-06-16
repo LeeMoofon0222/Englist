@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:gt_test_app/pages/auth_page.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+import 'pages/auth_page.dart';
 import 'pages/aboutme_page.dart';
 import 'pages/setting_page.dart';
 import 'pages/vocabulary_page.dart';
 import 'pages/test_page.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +16,12 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await dotenv.load(fileName: '.env');
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeNotifier(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -22,24 +29,40 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      //home: const LoginPage(),
-      title: 'My App',
-      initialRoute: '/',
-      routes: {
-        '/': (context) => AuthPage(),
-        '/VP': (context) => VocabularyPage(
+    return Consumer<ThemeNotifier>(
+      builder: (context, themeNotifier, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'My App',
+          theme: themeNotifier.isDarkMode ? ThemeData.dark() : ThemeData.light(),
+          initialRoute: '/',
+          routes: {
+            '/': (context) => AuthPage(),
+            '/VP': (context) => VocabularyPage(
               text: '',
               onTap: () {},
             ),
-        '/TP': (context) => const TestPage(),
-        '/SP': (context) => const SettingPage(),
-        '/AP': (context) => const AboutMePage(),
+            '/TP': (context) => const TestPage(),
+            '/SP': (context) => const SettingPage(),
+            '/AP': (context) => const AboutMePage(),
+          },
+        );
       },
     );
   }
 }
+
+class ThemeNotifier extends ChangeNotifier {
+  bool _isDarkMode = false;
+
+  bool get isDarkMode => _isDarkMode;
+
+  void toggleTheme() {
+    _isDarkMode = !_isDarkMode;
+    notifyListeners();
+  }
+}
+
 
 class BottomAppBarWidget extends StatefulWidget {
   //final Function onTap;
@@ -120,7 +143,14 @@ class _BurgerDrawerWidget extends State<BurgerDrawerWidget> {
     return Drawer(
       child: ListView(
         children: [
-          DrawerHeader(
+          const DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.red,
+              image: DecorationImage(
+                image: ExactAssetImage('lib/images/google.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
             child: Stack(
               children: [
                 Positioned(
@@ -133,32 +163,25 @@ class _BurgerDrawerWidget extends State<BurgerDrawerWidget> {
                 )
               ],
             ),
-            decoration: BoxDecoration(
-              color: Colors.red,
-              image: DecorationImage(
-                image: ExactAssetImage('lib/images/google.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
           ),
           ListTile(
-            leading: Icon(Icons.home),
-            title: Text("Home"),
+            leading: const Icon(Icons.home),
+            title: const Text("Home"),
             onTap: () {},
           ),
           ListTile(
-            leading: Icon(Icons.account_box),
-            title: Text("About"),
+            leading: const Icon(Icons.account_box),
+            title: const Text("About"),
             onTap: () {},
           ),
           ListTile(
-            leading: Icon(Icons.grid_3x3_outlined),
-            title: Text("Products"),
+            leading: const Icon(Icons.grid_3x3_outlined),
+            title: const Text("Products"),
             onTap: () {},
           ),
           ListTile(
-            leading: Icon(Icons.contact_mail),
-            title: Text("Contact"),
+            leading: const Icon(Icons.contact_mail),
+            title: const Text("Contact"),
             onTap: () {},
           )
         ],

@@ -138,7 +138,7 @@ class _VocabularyPageState extends State<VocabularyPage>
         return AlertDialog(
           backgroundColor: Colors.grey[300],
           title: const Text(
-            "確定要登出嗎",
+            "Logout?",
             style: TextStyle(
                 color: Colors.black, fontSize: 21, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
@@ -149,7 +149,7 @@ class _VocabularyPageState extends State<VocabularyPage>
                 Navigator.of(context).pop();
               },
               child: const Text(
-                '取消',
+                'cancel',
                 style: TextStyle(
                     fontSize: 15,
                     color: Colors.black,
@@ -163,7 +163,7 @@ class _VocabularyPageState extends State<VocabularyPage>
                 Navigator.pushReplacementNamed(context, '/');
               },
               child: const Text(
-                '確定',
+                'yes',
                 style: TextStyle(
                     fontSize: 15,
                     color: Colors.black,
@@ -190,20 +190,20 @@ class _VocabularyPageState extends State<VocabularyPage>
                 children: [
                   const Center(
                     child: Text(
-                      '新增單字',
+                      'New Vocab',
                       style: TextStyle(
                           fontSize: 25,
                           color: Colors.black,
                           fontWeight: FontWeight.w500),
                     ),
                   ),
-                  const SizedBox(height: 3),
+                  const SizedBox(height: 20),
                   SizedBox(
                     width: 300,
                     height: 43,
                     child: TranslateTextField(
                       controller: vocabularyEnglishController,
-                      hintText: '英文',
+                      hintText: 'English',
                       obscureText: false,
                     ),
                   ),
@@ -247,7 +247,7 @@ class _VocabularyPageState extends State<VocabularyPage>
                 vocabularyChineseController.clear();
               },
               child: const Text(
-                '清空',
+                'clear',
                 style: TextStyle(
                     fontSize: 15,
                     color: Colors.blue,
@@ -261,7 +261,7 @@ class _VocabularyPageState extends State<VocabularyPage>
                 vocabularyChineseController.clear();
               },
               child: const Text(
-                '取消',
+                'cancel',
                 style: TextStyle(
                     fontSize: 15,
                     color: Colors.black,
@@ -280,11 +280,11 @@ class _VocabularyPageState extends State<VocabularyPage>
                   vocabularyEnglishController.clear();
                   vocabularyChineseController.clear();
                 } else {
-                  showError("字串不得為空白");
+                  showError("can't be empty");
                 }
               },
               child: const Text(
-                '確定',
+                'yes',
                 style: TextStyle(
                     fontSize: 15,
                     color: Colors.black,
@@ -301,7 +301,7 @@ class _VocabularyPageState extends State<VocabularyPage>
     super.build(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("收藏單字",
+        title: const Text("Vocab",
             style: TextStyle(color: Colors.white, fontSize: 25)),
         backgroundColor: Colors.grey[800],
         iconTheme: const IconThemeData(color: Colors.white),

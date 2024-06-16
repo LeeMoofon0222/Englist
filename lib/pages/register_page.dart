@@ -36,7 +36,7 @@ class _RegisterPageState extends State<RegisterPage> {
             email: emailController.text, password: passwordController.text);
       }
       else{
-        showErrorMessage("密碼不相同");
+        showErrorMessage("Different password ");
       }
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
@@ -67,7 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: Colors.white,
-          title: const Text("確定要以訪客模式登入嗎?\n紀錄將不會儲存",
+          title: const Text("Login with Anonymous ?\nRecords will not be saved",
             style: TextStyle(color: Colors.black, fontSize: 21, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,),
           actions: [
@@ -76,7 +76,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Navigator.of(context).pop();
               },
               child: const Text(
-                '取消',
+                'cancel',
                 style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.w500),
               ),
             ),
@@ -86,7 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 AuthService().signInWithAnon();
               },
               child: const Text(
-                '確定',
+                'yes',
                 style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.w500),
               ),
             ),
@@ -114,30 +114,30 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 10),
               Text(
-                "讓我們為您創建帳號",
+                "Create Account",
                 style: TextStyle(color: Colors.grey[700], fontSize: 25),
               ),
               const SizedBox(height: 10),
               MyTextField(
                 controller: emailController,
-                hintText: '電子郵件',
+                hintText: 'email',
                 obscureText: false,
               ),
               const SizedBox(height: 10),
               MyTextField(
                 controller: passwordController,
-                hintText: '密碼',
+                hintText: 'password',
                 obscureText: true,
               ),
               const SizedBox(height: 10),
               MyTextField(
                 controller: confirmPasswordController,
-                hintText: '確認密碼',
+                hintText: 'confirm',
                 obscureText: true,
               ),
               const SizedBox(height: 20),
               MyButton(
-                text: "註冊",
+                text: "register",
                 onTap: signup,
               ),
               const SizedBox(height: 20),
@@ -153,7 +153,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Text(
-                        '使用其他帳號登入',
+                        'login with another account',
                         style: TextStyle(color: Colors.grey[800]),
                       ),
                     ),
@@ -174,7 +174,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   SquareTile(imagePath: 'lib/images/Anonymous.png', onTap: () => anoMessage()),
                   const SizedBox(width: 40),
                   SquareTile(
-                      imagePath: 'lib/images/Facebook_icon.png',
+                      imagePath: 'lib/images/facebook.png',
                       onTap: () => AuthService().signInWithFacebook())
                 ],
               ),
@@ -183,14 +183,14 @@ class _RegisterPageState extends State<RegisterPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '已經有帳號?',
+                    'Already have one?',
                     style: TextStyle(color: Colors.grey[700]),
                   ),
                   const SizedBox(height: 4),
                   GestureDetector(
                     onTap: widget.onTap,
                     child: const Text(
-                      '現在登入',
+                      'Login now',
                       style: TextStyle(
                           color: Colors.blue, fontWeight: FontWeight.bold),
                     ),
