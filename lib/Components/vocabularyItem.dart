@@ -104,7 +104,7 @@ class _VocabularyItemState extends State<VocabularyItem> {
                   children: [
                     const Center(
                       child: Text(
-                        '編輯單字',
+                        'Edit Vocab',
                         style: TextStyle(
                             fontSize: 30,
                             color: Colors.black,
