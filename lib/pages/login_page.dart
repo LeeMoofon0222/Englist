@@ -185,10 +185,11 @@ class _LoginPageState extends State<LoginPage> {
                   SquareTile(
                       imagePath: 'lib/images/Anonymous.png',
                       onTap: () => anoMessage()),
-                  const SizedBox(width: 40),
+                  /*const SizedBox(width: 40),
+
                   SquareTile(
                       imagePath: 'lib/images/facebook.png',
-                      onTap: () => AuthService().signInWithFacebook())
+                      onTap: () => AuthService().signInWithFacebook())*/
                 ],
               ),
               const SizedBox(height: 30),
