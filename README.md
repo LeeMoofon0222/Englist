@@ -9,7 +9,16 @@ Allows users to instantly translate and add words to their vocabulary while read
 Optimize reviews:
 Use ChatGPT to tailor sentences for users to review from their vocabulary and send them via LINE Bot.
 <h2>Screen Shot</h2>
-<img src="https://github.com/LeeMoofon0222/gt_test_app/blob/master/ReadMe_Picture/Pic1.png?raw=true">
-<img src="https://github.com/LeeMoofon0222/gt_test_app/blob/master/ReadMe_Picture/Pic2.png?raw=true">
-<img src="https://github.com/LeeMoofon0222/gt_test_app/blob/master/ReadMe_Picture/Pic3.png?raw=true">
-<img src="https://github.com/LeeMoofon0222/gt_test_app/blob/master/ReadMe_Picture/Pic4.png?raw=true">
+<img src="https://github.com/LeeMoofon0222/Picture-Repository/blob/main/Pictures/Englist-1.png">
+<img src="https://github.com/LeeMoofon0222/Picture-Repository/blob/main/Pictures/Englist-2.png">
+<img src="https://github.com/LeeMoofon0222/Picture-Repository/blob/main/Pictures/Englist-3.png">
+<img src="https://github.com/LeeMoofon0222/Picture-Repository/blob/main/Pictures/Englist-4.png">
+<img src="https://github.com/LeeMoofon0222/Picture-Repository/blob/main/Pictures/Englist-5.png">
+<img src="https://github.com/LeeMoofon0222/Picture-Repository/blob/main/Pictures/Englist-6.png">
+<img src="https://github.com/LeeMoofon0222/Picture-Repository/blob/main/Pictures/Englist-7.png">
+<img src="https://github.com/LeeMoofon0222/Picture-Repository/blob/main/Pictures/Englist-8.png">
+<img src="https://github.com/LeeMoofon0222/Picture-Repository/blob/main/Pictures/Englist-9.png">
+<img src="https://github.com/LeeMoofon0222/Picture-Repository/blob/main/Pictures/Englist-10.png">
+<img src="https://github.com/LeeMoofon0222/Picture-Repository/blob/main/Pictures/Englist-11.png">
+<img src="https://github.com/LeeMoofon0222/Picture-Repository/blob/main/Pictures/Englist-12.png">
+<img src="https://github.com/LeeMoofon0222/Picture-Repository/blob/main/Pictures/Englist-13.png">
