@@ -296,9 +296,23 @@ class _VocabularyPageState extends State<VocabularyPage>
       },
     );
   }
+  final searchController = TextEditingController();
+  String searchQuery = '';
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final filteredVocabularies = _vocabularies.where((vocabulary) {
+      final matchesSearch = searchQuery.isEmpty ||
+          vocabulary.mainWord.toLowerCase().contains(searchQuery) ||
+          vocabulary.associateWord.toLowerCase().contains(searchQuery);
+
+      if (storeVocab) {
+        return matchesSearch && vocabulary.ifStore == "true";
+      }
+      return matchesSearch;
+    }).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Vocab",
@@ -339,26 +353,61 @@ class _VocabularyPageState extends State<VocabularyPage>
           )
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        children: _vocabularies.map((Vocabulary vocabulary) {
-          if (storeVocab && vocabulary.ifStore == "true") {
-              return VocabularyItem(
-                vocabulary: vocabulary,
-                removeVocabulary: _deleteItem,
-              );
-          }
-          else if(!storeVocab)
-          {
-            return VocabularyItem(
-              vocabulary: vocabulary,
-              removeVocabulary: _deleteItem,
-            );
-          }
-          else{
-            return Container();
-          }
-        }).toList(),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: TextField(
+              controller: searchController,
+              onChanged: (val) {
+                setState(() {
+                  searchQuery = val.trim().toLowerCase();
+                });
+              },
+              decoration: InputDecoration(
+                hintText: 'Search vocabulary / 搜尋單字或中文...',
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: searchQuery.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          searchController.clear();
+                          setState(() {
+                            searchQuery = '';
+                          });
+                        },
+                      )
+                    : null,
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: filteredVocabularies.isEmpty
+                ? const Center(
+                    child: Text(
+                      'No vocabulary found',
+                      style: TextStyle(color: Colors.grey, fontSize: 16),
+                    ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    itemCount: filteredVocabularies.length,
+                    itemBuilder: (context, index) {
+                      return VocabularyItem(
+                        vocabulary: filteredVocabularies[index],
+                        removeVocabulary: _deleteItem,
+                      );
+                    },
+                  ),
+          ),
+        ],
       ),
       bottomNavigationBar: const BottomAppBarWidget(),
       drawer: const BurgerDrawerWidget(),

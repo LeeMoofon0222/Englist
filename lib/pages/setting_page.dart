@@ -72,16 +72,58 @@ class SettingPage extends StatelessWidget {
       ),
       bottomNavigationBar: const BottomAppBarWidget(),
       backgroundColor: Colors.grey[300],
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: ListView(
+        padding: const EdgeInsets.all(16.0),
         children: [
-          SwitchListTile(
-            title: const Text('Dark mode'),
-            value: Provider.of<ThemeNotifier>(context).isDarkMode,
-            onChanged: (value) {
-              Provider.of<ThemeNotifier>(context, listen: false).toggleTheme();
-            },
+          Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Column(
+              children: [
+                SwitchListTile(
+                  secondary: const Icon(Icons.dark_mode),
+                  title: const Text('Dark mode', style: TextStyle(fontWeight: FontWeight.w600)),
+                  value: Provider.of<ThemeNotifier>(context).isDarkMode,
+                  onChanged: (value) {
+                    Provider.of<ThemeNotifier>(context, listen: false).toggleTheme();
+                  },
+                ),
+              ],
+            ),
           ),
+          const SizedBox(height: 12),
+          Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: ListTile(
+              leading: const Icon(Icons.info_outline, color: Colors.blue),
+              title: const Text('App Version', style: TextStyle(fontWeight: FontWeight.w600)),
+              subtitle: const Text('v1.0.1 (Build 3)'),
+              trailing: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.green[100],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  'Latest',
+                  style: TextStyle(color: Colors.green[800], fontSize: 12, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          if (FirebaseAuth.instance.currentUser != null)
+            Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              child: ListTile(
+                leading: const Icon(Icons.person_outline),
+                title: const Text('Account', style: TextStyle(fontWeight: FontWeight.w600)),
+                subtitle: Text(FirebaseAuth.instance.currentUser?.email ?? 'Logged in'),
+                trailing: TextButton(
+                  onPressed: () => signUserOut(context),
+                  child: const Text('Logout', style: TextStyle(color: Colors.red)),
+                ),
+              ),
+            ),
         ],
       ),
     );
